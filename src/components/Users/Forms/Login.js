@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-
+import { useDispatch } from "react-redux";
+import loginUserAction from "../../../redux/slices/users/usersSlice"
 const Login = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "admin@gmail.com",
     password: "12345",
@@ -15,6 +17,8 @@ const Login = () => {
   //---onsubmit handler----
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    console.log(email,password);
+    dispatch(loginUserAction({email,password}))
   };
 
   //select store data
