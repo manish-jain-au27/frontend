@@ -28,6 +28,8 @@ export const loginUserAction = createAsyncThunk(
         email ,
         password  
       });
+      //save user to local storage
+      localStorage.setItem('userInfo',JSON.stringify(data))
       return data;
 
     } catch (error) {
