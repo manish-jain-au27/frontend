@@ -7,22 +7,89 @@ import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import SuccessMsg from "../../SuccessMsg/SuccessMsg";
 import { createProductAction } from "../../../redux/slices/products/productSlices";
+import { fetchCategoriesAction } from "../../../redux/slices/categories/categoriesSlice";
+import { fetchBrandsAction } from "../../../redux/slices/categories/brandSlice";
+import { fetchColorsAction } from "../../../redux/slices/categories/colorsSlice";
 
 //animated components for react-select
 const animatedComponents = makeAnimated();
 
 export default function AddProduct() {
   const dispatch = useDispatch();
-  let categories,
-    sizeOptionsCoverted,
-    handleSizeChange,
-    colorOptionsCoverted,
-    handleColorChangeOption,
-    brands,
-    loading,
-    error,
-    isAdded;
+  //files
+  const [files,setFiles]=useState([]);
+  const [fileErrs,setFileErrs]= useState([]);
+  //file handle change
+  const fileHandleChange = (event)=>{
+    const newFiles = Array.from(event.target.files);
+    //validation
+    const newErrs=[]
+    newFiles.forEach(file=>{
+      if(file?.size>1000000){
+        newErrs.push(`${file?.name} is too large`)
+      }
+      if(!file?.type?.startsWith('image/')){
+        newErrs.push(`${file?.name} is not an image`)
+      }
+    })
+    setFiles(newFiles);
+    setFileErrs(newErrs)
+  }
+  //sizes
+  const sizes = ['S','M','L','XL','XXL'];
+  const [sizeOption, setSizeOption] = useState([]);
+  const handleSizeChange = (sizes)=>{
+    setSizeOption(sizes);
+  }
+  //converted sizes
+  const sizeOptionsCoverted = sizes?.map(size=>{
+    return{
+      value: size,
+      label:size,
+    }
+  })
+  //categories
+  useEffect(()=>{
+    dispatch(fetchCategoriesAction())
+  },[dispatch]);
+ //select data from store
+const {categories }= useSelector(
+  (state)=> state?.categories?.categories)
 
+    //brands
+    useEffect(()=>{
+      dispatch(fetchBrandsAction())
+    },[dispatch]);
+   //select data from store
+  const {brands:{brands}}= useSelector(
+    (state)=> state?.brands)
+
+   //colors
+   useEffect(()=>{
+    dispatch(fetchColorsAction())
+  },[dispatch]);
+
+  const handleColorChange = (colors)=>{
+    setColorsOption(colors);
+  }
+
+
+  //converted colors
+  const colorssCoverted = sizes?.map(color=>{
+    return{
+      value: color?.name,
+      label:color?.name,
+    };
+  });
+
+
+ //select data from store
+ const [colorsOption, setColorsOption] = useState([]);
+const {colors:{colors}}= useSelector(
+  (state)=> state?.colors)
+
+
+ 
   //---form data---
   const [formData, setFormData] = useState({
     name: "",
@@ -31,7 +98,6 @@ export default function AddProduct() {
     sizes: "",
     brand: "",
     colors: "",
-    images: "",
     price: "",
     totalQty: "",
   });
@@ -41,11 +107,22 @@ export default function AddProduct() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  //get product from store
+  const{product, isAdded, loading, error}= useSelector(
+    (state)=>state?.products
+    );
+
+
   //onSubmit
   const handleOnSubmit = (e) => {
     e.preventDefault();
     //dispatch
-    dispatch(createProductAction(formData));
+    dispatch(createProductAction({
+      ...formData,
+      files,
+      colors:colorsOption?.map(color=>color.label),
+      sizes: sizeOption?.map(size=>size.label),
+    }));
     //reset form data
     setFormData({
       name: "",
@@ -63,6 +140,7 @@ export default function AddProduct() {
   return (
     <>
       {error && <ErrorMsg message={error?.message} />}
+      {fileErrs?.length >0 && <ErrorMsg message= "file too large or upload an image" />}
       {isAdded && <SuccessMsg message="Product Added Successfully" />}
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -74,6 +152,7 @@ export default function AddProduct() {
               Manage Products
             </p>
           </p>
+         
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -163,14 +242,14 @@ export default function AddProduct() {
                   components={animatedComponents}
                   isMulti
                   name="colors"
-                  options={colorOptionsCoverted}
+                  options={colorssCoverted}
                   className="basic-multi-select"
                   classNamePrefix="select"
                   isClearable={true}
                   isLoading={false}
                   isSearchable={true}
                   closeMenuOnSelect={false}
-                  onChange={(e) => handleColorChangeOption(e)}
+                  onChange={(e) => handleColorChange(e)}
                 />
               </div>
 
@@ -271,6 +350,7 @@ export default function AddProduct() {
                   <LoadingComponent />
                 ) : (
                   <button
+                  disabled={fileErrs.length>0}
                     type="submit"
                     className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     Add Product

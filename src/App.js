@@ -32,11 +32,11 @@ import ManageOrders from "./components/Admin/Orders/ManageOrders";
 import Customers from "./components/Admin/Orders/Customers";
 import BrandsColorsList from "./components/Admin/Categories/BrandsColorsList";
 import AdminRoutes from "./components/AuthRoute/AdminRoutes";
-AdminRoutes
+
 const App = () => {
   return (
     <BrowserRouter>
-     {/* <Navbar />*/}
+     { <Navbar />}
       {/* hide navbar if admin */}
       <Routes>
         {/* nested route */}

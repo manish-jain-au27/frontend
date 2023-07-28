@@ -27,7 +27,7 @@ export const registerUserAction = createAsyncThunk(
   async ({email,password,fullname},{rejectWithValue,getState,dispatch})=>{
     try {
       //make http request
-      const res = await axios.post(`${baseURL}/users/register`,{
+      const {data} = await axios.post(`${baseURL}/users/register`,{
         email ,
         password,
         fullname  
@@ -46,7 +46,7 @@ export const loginUserAction = createAsyncThunk(
   async ({email,password},{rejectWithValue,getState,dispatch})=>{
     try {
       //make http request
-      const res = await axios.post(`${baseURL}/users/login`,{
+      const {data} = await axios.post(`${baseURL}/users/login`,{
         email ,
         password  
       });
@@ -93,7 +93,7 @@ const usersSlice = createSlice({
       state.loading = false;
     });
     //reset error action
-    builder.addCase(resetErrAction.pending,()=>{
+    builder.addCase(resetErrAction.pending,(state)=>{
       state.error = null;
     })
   }
