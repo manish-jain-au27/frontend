@@ -72,23 +72,23 @@ export default function Navbar() {
                   ))} */}
                   {categoriesToDisplay?.length <= 0 ? (
                     <>
-                      <a
-                        href={`${baseURL}/products?category=clothing`}
+                      <Link
+                        to="/products?category=clothing"
                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         Clothing...
-                      </a>
+                      </Link>
 
-                      <a
+                      <Link
                         href="/"
                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         Men
-                      </a>
+                      </Link>
 
-                      <a
+                      <Link
                         href="/"
                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         Women
-                      </a>
+                      </Link>
                     </>
                   ) : (
                     categoriesToDisplay?.map((category) => {
@@ -108,22 +108,26 @@ export default function Navbar() {
 
                 {/* mobile links register/login */}
                 <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                  {!isLoggedIn && <>
-                    <div className="flow-root">
-                    <Link
-                      to="/register"
-                      className="-m-2 block p-2 font-medium text-gray-900">
-                      Create an account
-                    </Link>
-                  </div>
-                  <div className="flow-root">
-                    <Link
-                      to="/login"
-                      className="-m-2 block p-2 font-medium text-gray-900">
-                      Sign in
-                    </Link>
-                  </div>
-                  </>}
+                   {!isLoggedIn && (
+                    <>
+                      <div className="flow-root">
+                        <Link
+                          to="/register"
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Create an account
+                        </Link>
+                      </div>
+                      <div className="flow-root">
+                        <Link
+                          to="/login"
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Sign in
+                        </Link>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="space-y-6 border-t border-gray-200 py-6 px-4"></div>
@@ -143,19 +147,26 @@ export default function Navbar() {
               </p>
 
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                {!isLoggedIn && <>
-                  <Link
-                  to="/register"
-                  className="text-sm font-medium text-white hover:text-gray-100">
-                  Create an account
-                </Link>
-                <span className="h-6 w-px bg-gray-600" aria-hidden="true" />
-                <Link
-                  to="/login"
-                  className="text-sm font-medium text-white hover:text-gray-100">
-                  Sign in
-                </Link>
-                </>}
+              {!isLoggedIn && (
+                    <>
+                      <Link
+                        to="/register"
+                        className="text-sm font-medium text-white hover:text-gray-100"
+                      >
+                        Create an account
+                      </Link>
+                      <span
+                        className="h-6 w-px bg-gray-600"
+                        aria-hidden="true"
+                      />
+                      <Link
+                        to="/login"
+                        className="text-sm font-medium text-white hover:text-gray-100"
+                      >
+                        Sign in
+                      </Link>
+                    </>
+                  )}
               </div>
             </div>
           </div>

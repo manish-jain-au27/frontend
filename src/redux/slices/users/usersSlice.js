@@ -1,7 +1,8 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../utils/baseURL";
-import { data } from "autoprefixer";
+
+import { resetErrAction } from "../globalActions/globalActions";
 
 const initialState = {
   loading : false,
@@ -12,11 +13,32 @@ const initialState = {
   userAuth :{
     loading : false,
     error : null,
-    userInfo : {},
+    userInfo : localStorage.getItem("userInfo") 
+    ? JSON.parse(localStorage.getItem('userInfo')) 
+    :null,
 
-  }
+  },
 }
 
+
+//register action
+export const registerUserAction = createAsyncThunk(
+  "users/register",
+  async ({email,password,fullname},{rejectWithValue,getState,dispatch})=>{
+    try {
+      //make http request
+      const res = await axios.post(`${baseURL}/users/register`,{
+        email ,
+        password,
+        fullname  
+      });
+     
+      return data;
+
+    } catch (error) {
+      return rejectWithValue(error?.response?.data)
+    }
+  });
 
 //login action
 export const loginUserAction = createAsyncThunk(
@@ -52,12 +74,28 @@ const usersSlice = createSlice({
     });
     builder.addCase(loginUserAction.fulfilled,(state,action)=>{
       state.userAuth.userInfo = action.payload;
-      state.userAuth.laoding = false;
+      state.userAuth.loading = false;
     });
     builder.addCase(loginUserAction.rejected,(state,action)=>{
       state.userAuth.userInfo = action.payload;
-      state.userAuth.laoding = false;
+      state.userAuth.loading = false;
     });
+    //register
+    builder.addCase(registerUserAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(registerUserAction.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(registerUserAction.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    //reset error action
+    builder.addCase(resetErrAction.pending,()=>{
+      state.error = null;
+    })
   }
 
 });
