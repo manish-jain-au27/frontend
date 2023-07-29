@@ -22,7 +22,7 @@ const initialState ={
 //fetch products action
 export const createProductAction = createAsyncThunk(
 'product/create',
-async(payload,{rejectWithValue,getState,dispatch})=>{
+async({payload},{rejectWithValue,getState,dispatch})=>{
     try {
         const {name,description,category,sizes,brand,colors,price,totalqty,files} = payload;
             //make request
@@ -72,7 +72,7 @@ async(payload,{rejectWithValue,getState,dispatch})=>{
 //fetch products action
 export const fetchProductsAction = createAsyncThunk(
     'product/list',
-    async(payload,{rejectWithValue,getState,dispatch})=>{
+    async({url},{rejectWithValue,getState,dispatch})=>{
         try {
             
     
@@ -87,7 +87,7 @@ export const fetchProductsAction = createAsyncThunk(
                 };
                 
                 //images
-                const {data} = await axios.get(`${baseURL}/products`,config)
+                const {data} = await axios.get(`${url}`,config)
             return data;
     
         } catch (error) {

@@ -15,7 +15,15 @@ import {
   PlusIcon,
 } from "@heroicons/react/20/solid";
 import Products from "./Products";
-
+import { useSearchParams } from "react-router-dom";
+import baseURL from "../../../utils/baseURL";
+import { useDispatch,useSelector } from "react-redux";
+import { fetchProductAction } from "../../../redux/slices/products/productSlices";
+import { fetchBrandsAction } from "../../../redux/slices/categories/brandSlice";
+import { fetchColorsAction } from "../../../redux/slices/categories/colorsSlice";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
+import ErrorMsg from "../../ErrorMsg/ErrorMsg";
+import NoDataFound from "../../NoDataFound/NoDataFound";
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
   { name: "Best Rating", href: "#", current: false },
@@ -23,6 +31,8 @@ const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
 ];
+
+
 
 const allPrice = [
   {
@@ -68,20 +78,68 @@ const sizeCategories = [
 ];
 
 export default function ProductsFilters() {
+  //dispatch
+  const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  //get query string
+  const [params,setParams]= useSearchParams();
+  const category = params.get('category');
+  //filters
+  const [color,setColor] = useState('');
+  const [price,setPrice] = useState('');
+  const [brand,setBrand] = useState('');
+  const [size,setSize] = useState('');
+//build app url
+let productUrl =`${baseURL}/products`;
+if(category){
+  productUrl =`${baseURL}/products?category=${category}`;
+}
+if(brand){
+  productUrl =`${productUrl}&brand=${brand}`;
+}
+if(size){
+  productUrl =`${productUrl}&size=${size}`;
+}
+if(price){
+  productUrl =`${productUrl}&price=${price}`;
+}
+if(color){
+  productUrl =`${productUrl}&color=${color}`;
+}
+//fetch all product
+useEffect(()=>{
+  dispatch(fetchProductAction({
+    url:productUrl,
+  })
+  );
+},[dispatch,category,size,brand,price,color]);
+//get store data
+const {products:{products},loading,error}= useSelector(state=>state?.products);
+//fetch brands
+useEffect(()=>{
+  dispatch(fetchBrandsAction({
+    url:productUrl,
+  })
+  );
+},[dispatch]);
+//get store data
+const {brands:{brands}}= useSelector(state=>state?.brands);
+//fetch colors
+useEffect(()=>{
+  dispatch(fetchColorsAction({
+    url:productUrl,
+  })
+  );
+},[dispatch]);
+//get store data
+const {colors:{colors}}= useSelector(state=>state?.colors);
 
   let colorsLoading;
   let colorsError;
-  let colors;
-  let setPrice;
-  let brands;
-  let setSize;
-  let setColor;
-  let setBrand;
   let productsLoading;
   let productsError;
-  let products;
+
 
   return (
     <div className="bg-white">
@@ -372,16 +430,16 @@ export default function ProductsFilters() {
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
-                              {sizeCategories.map((option) => (
-                                <div key={option} className="flex items-center">
+                              {sizeCategories.map((size) => (
+                                <div key={size} className="flex items-center">
                                   <input
                                     type="radio"
                                     name="size"
-                                    onClick={() => setSize(option)}
+                                    onClick={() => setSize(size)}
                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                   />
                                   <label className="ml-3 min-w-0 flex-1 text-gray-500">
-                                    {option}
+                                    {size}
                                   </label>
                                 </div>
                               ))}
@@ -687,10 +745,12 @@ export default function ProductsFilters() {
               </form>
 
               {/* Product grid */}
-              {productsLoading ? (
-                <h2 className="text-xl">Loading...</h2>
-              ) : productsError ? (
-                <h2 className="text-red-500">{productsError}</h2>
+              {loading ? (
+                <LoadingComponent />
+              ) : error ? (
+                <ErrorMsg message={error?.message} />
+              ) : products?.length <= 0 ? (
+                <NoDataFound />
               ) : (
                 <Products products={products} />
               )}

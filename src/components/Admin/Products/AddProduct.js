@@ -52,16 +52,15 @@ export default function AddProduct() {
   useEffect(()=>{
     dispatch(fetchCategoriesAction())
   },[dispatch]);
- //select data from store
-const {categories }= useSelector(
-  (state)=> state?.categories?.categories)
+  //select data from store
+  const { categories } = useSelector((state) => state?.categories);
 
     //brands
     useEffect(()=>{
       dispatch(fetchBrandsAction())
     },[dispatch]);
    //select data from store
-  const {brands:{brands}}= useSelector(
+  const {brands}= useSelector(
     (state)=> state?.brands)
 
    //colors
