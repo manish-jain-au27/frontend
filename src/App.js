@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Swal from "sweetalert2";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ManageCoupons from "./components/Admin/Coupons/ManageCoupons";
 import AddCoupon from "./components/Admin/Coupons/AddCoupon";
@@ -26,25 +25,24 @@ import ProductsFilters from "./components/Users/Products/ProductsFilters";
 import CustomerProfile from "./components/Users/Profile/CustomerProfile";
 import AddReview from "./components/Users/Reviews/AddReview";
 import UpdateCategory from "./components/Admin/Categories/UpdateCategory";
-import AuthRoute from "./components/AuthRoute/AuthRoute";
+
 import OrdersList from "./components/Admin/Orders/OdersList";
 import ManageOrders from "./components/Admin/Orders/ManageOrders";
 import Customers from "./components/Admin/Orders/Customers";
 import BrandsColorsList from "./components/Admin/Categories/BrandsColorsList";
-import AdminRoutes from "./components/AuthRoute/AdminRoutes";
+import AuthRoute from "./components/AuthRoute/AuthRoute";
+import AdminRoute from "./components/AuthRoute/AdminRoute";
 
 const App = () => {
   return (
     <BrowserRouter>
-     { <Navbar />}
+      <Navbar />
       {/* hide navbar if admin */}
       <Routes>
         {/* nested route */}
-        <Route path="admin" element={
-          <AdminRoutes>
-            <AdminDashboard/>
-          </AdminRoutes>
-        }>
+        <Route path="admin" element={<AdminRoute>
+          <AdminDashboard />
+        </AdminRoute>}>
           {/* products */} <Route path="" element={<OrdersList />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="manage-products" element={<ManageStocks />} />

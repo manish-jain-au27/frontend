@@ -178,7 +178,7 @@ const brandsLinks = [
   },
 ];
 
-export default function AdminRoutes() {
+export default function Example() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

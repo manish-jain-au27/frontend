@@ -5,8 +5,8 @@ import { data } from "autoprefixer";
 
 //initial state
 const initialState = {
-    categories : [],
-    category : {},
+    brands : [],
+    brand : {},
     loading : false, 
     error : null,
     isAdded : false,
@@ -14,8 +14,8 @@ const initialState = {
     isDeleted : false
 }
 
-//create category action
-export const createCategoryAction = createAsyncThunk('category/create',
+//create brand action
+export const createBrandAction = createAsyncThunk('brand/create',
 async(payload,{rejectWithValue,getState,dispatch})=>{
     try {
         const{ name }=payload;
@@ -31,7 +31,7 @@ async(payload,{rejectWithValue,getState,dispatch})=>{
         }
         //Images
 
-        const {data} = await axios.post(`${baseURL}/categories`,{
+        const {data} = await axios.post(`${baseURL}/brands`,{
             name 
         },
         config
@@ -42,12 +42,12 @@ async(payload,{rejectWithValue,getState,dispatch})=>{
     }
 });
 
-///fetch Categories action
-export const fetchCategoriesAction = createAsyncThunk(
-    "category/fetch All",
+///fetch brands action
+export const fetchBrandsAction = createAsyncThunk(
+    "brands/fetch All",
     async (payload, { rejectWithValue, getState, dispatch }) => {
       try {
-        const { data } = await axios.get(`${baseURL}/categories`);
+        const { data } = await axios.get(`${baseURL}/brands`);
         return data;
       } catch (error) {
         return rejectWithValue(error?.response?.data);
@@ -56,38 +56,38 @@ export const fetchCategoriesAction = createAsyncThunk(
   );
   
 
-//create slice
-const categorySlice = createSlice({
-    name: "categories",
+//create brands
+const brandsSlice = createSlice({
+    name: "brands",
     initialState,extraReducers:(builder)=>{
         //create
-        builder.addCase(createCategoryAction.pending, (state)=>{
+        builder.addCase(createBrandAction.pending, (state)=>{
             state.loading = true;
     });
       
-    builder.addCase(createCategoryAction.fulfilled, (state,action)=>{
+    builder.addCase(createBrandAction.fulfilled, (state,action)=>{
         state.loading = false;
-        state.category = action.payload;
+        state.brand = action.payload;
         state.isAdded = true;
     });
-    builder.addCase(createCategoryAction.rejected, (state,action)=>{
+    builder.addCase(createBrandAction.rejected, (state,action)=>{
         state.loading = false;
-        state.category = null;
+        state.brand = null;
         state.isAdded = false;
         state.error = action.payload;
     });
     
     //fetch all
-    builder.addCase(fetchCategoriesAction.pending, (state) => {
+    builder.addCase(fetchBrandsAction.pending, (state) => {
         state.loading = true;
       });
-      builder.addCase(fetchCategoriesAction.fulfilled, (state, action) => {
+      builder.addCase(fetchBrandsAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = action.payload;
+        state.brands = action.payload;
       });
-      builder.addCase(fetchCategoriesAction.rejected, (state, action) => {
+      builder.addCase(fetchBrandsAction.rejected, (state, action) => {
         state.loading = false;
-        state.categories = null;
+        state.brands = null;
         state.error = action.payload;
       });
       },
@@ -96,5 +96,5 @@ const categorySlice = createSlice({
 
 
 //generate reducer
-const categoryReducer = categorySlice.reducer;
-export default categoryReducer;
+const brandsReducer = brandsSlice.reducer;
+export default brandsReducer;

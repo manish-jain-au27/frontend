@@ -1,19 +1,12 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchCategoriesAction } from "../../redux/slices/categories/categoriesSlice";
 
 const AllCategories = () => {
-   //dispatch
-   const dispatch = useDispatch();
-   useEffect(()=>{
-     dispatch(fetchCategoriesAction())
-   },[dispatch])
-   //get data from store
-  const {categories:{categories}}= useSelector(state=>state?.categories)
- 
-
-  
+  const {
+    categories: { categories },
+    loading,
+    error,
+  } = {};
 
   return (
     <>
@@ -34,12 +27,12 @@ const AllCategories = () => {
               {categories?.map((category) => (
                 <Link
                   key={category.name}
-                  to={`/products-filters?category=${category?.name}`}
+                  to={`/products-filters?category=${category.name}`}
                   className="relative flex h-80 w-56 flex-col mt-4 overflow-hidden rounded-lg p-6 hover:opacity-75 xl:w-auto">
                   <span aria-hidden="true" className="absolute inset-0">
                     <img
                       src={category.image}
-                      alt={category?.name}
+                      alt=""
                       className="h-full w-full object-cover object-center"
                     />
                   </span>

@@ -5,9 +5,7 @@ import {
   GlobeAmericasIcon,
 } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProductAction } from "../../../redux/slices/products/productSlices";
+import { Link } from "react-router-dom";
 const product = {
   name: "Basic Tee",
   price: "$35",
@@ -67,7 +65,6 @@ const product = {
   ],
 };
 
-
 const policies = [
   {
     name: "International delivery",
@@ -86,8 +83,6 @@ function classNames(...classes) {
 }
 
 export default function Product() {
-  //dispatch
-  const dispatch = useDispatch();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
 
@@ -97,13 +92,6 @@ export default function Product() {
   let productColor;
   let productSize;
   let cartItems = [];
-//get id from params
-const {id} = useParams();
-useEffect(()=>{
-  dispatch(fetchProductAction(id))
-},[id]);
-//get data from store
-const {loading,error,product:{product}}=useSelector(state=>state?.products)
 
   return (
     <div className="bg-white">
@@ -112,10 +100,10 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
           <div className="lg:col-span-5 lg:col-start-8">
             <div className="flex justify-between">
               <h1 className="text-xl font-medium text-gray-900">
-                {product?.name}
+                {productDetails?.product?.name}
               </h1>
               <p className="text-xl font-medium text-gray-900">
-                $ {product?.price}.00
+                $ {productDetails?.product?.price}.00
               </p>
             </div>
             {/* Reviews */}
@@ -123,7 +111,7 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
               <h2 className="sr-only">Reviews</h2>
               <div className="flex items-center">
                 <p className="text-sm text-gray-700">
-                  {product?.product?.averageRating}
+                  {productDetails?.product?.averageRating}
                   <span className="sr-only"> out of 5 stars</span>
                 </p>
                 <div className="ml-1 flex items-center">
@@ -168,10 +156,10 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
             <h2 className="sr-only">Images</h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-              {product?.images?.map((image) => (
+              {product.images.map((image) => (
                 <img
                   key={image.id}
-                  src={image}
+                  src={image.imageSrc}
                   alt={image.imageAlt}
                   className={classNames(
                     image.primary
@@ -192,7 +180,7 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
                 <div className="flex items-center space-x-3">
                   <RadioGroup value={selectedColor} onChange={setSelectedColor}>
                     <div className="mt-4 flex items-center space-x-3">
-                      {product?.colors?.map((color) => (
+                      {productColor?.map((color) => (
                         <RadioGroup.Option
                           key={color}
                           value={color}
@@ -204,7 +192,7 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
                             )
                           }>
                           <RadioGroup.Label as="span" className="sr-only">
-                            {color}
+                            {color.name}
                           </RadioGroup.Label>
                           <span
                             style={{ backgroundColor: color }}
@@ -231,7 +219,7 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
                   className="mt-2">
                   {/* Choose size */}
                   <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                    {product?.sizes?.map((size) => (
+                    {productSize?.map((size) => (
                       <RadioGroup.Option
                         key={size}
                         value={size}
@@ -270,7 +258,7 @@ const {loading,error,product:{product}}=useSelector(state=>state?.products)
             <div className="mt-10">
               <h2 className="text-sm font-medium text-gray-900">Description</h2>
               <div className="prose prose-sm mt-4 text-gray-500">
-                {product?.description}
+                {productDetails?.product?.description}
               </div>
             </div>
 

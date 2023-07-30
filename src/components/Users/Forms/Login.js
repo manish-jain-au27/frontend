@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
-import loginUserAction from "../../../redux/slices/users/usersSlice";
+import { loginUserAction } from "../../../redux/slices/users/userSlices";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
+
+
 const Login = () => {
+  //dispatch
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    email: "admin@gmail.com",
-    password: "12345",
+    email: "manish@gmail.com",
+    password: "123",
   });
   //---Destructuring---
   const { email, password } = formData;
@@ -19,18 +22,19 @@ const Login = () => {
   //---onsubmit handler----
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(email,password);
+  
     dispatch(loginUserAction({email,password}))
   };
-
-  // get data from store
- const {error,loading,userInfo}= useSelector((state)=>state?.users?.userAuth);
-//redirect
-if(userInfo?.userFound?.isAdmin){
-  window.location.href="/admin";
-} else {
-  window.location.href = "/customer-profile";
-}
+  //get data from store
+ const { error, loading, userInfo } = useSelector(
+    (state) => state?.users?.userAuth
+  );
+  //redirect
+  // if(userInfo?.userFound?.isAdmin){
+  //  window.location.href = '/admin'
+  // } else{
+  //   window.location.href = '/customer-profile'
+  // }
 
   return (
     <>
@@ -46,8 +50,9 @@ if(userInfo?.userFound?.isAdmin){
                 <p className="mb-10 font-semibold font-heading">
                   Happy to see you again
                 </p>
-                {/*error message*/}
-                {error && <ErrorMsg message={error?.message}/>}
+                
+                 {/* err */}
+                {error && <ErrorMsg message={error?.message} />}
                 <form
                   className="flex flex-wrap -mx-4"
                   onSubmit={onSubmitHandler}>
@@ -81,12 +86,9 @@ if(userInfo?.userFound?.isAdmin){
                   </div>
 
                   <div className="w-full px-4">
-                    {loading ? (
-                    <LoadingComponent/>):(
-                      <button className="bg-blue-800 hover:bg-blue-900 text-white font-bold font-heading py-5 px-8 rounded-md uppercase">
+                    {loading ?(<LoadingComponent />):(<button className="bg-blue-800 hover:bg-blue-900 text-white font-bold font-heading py-5 px-8 rounded-md uppercase">
                       Login
                     </button>
-
                     )}
                   </div>
                 </form>

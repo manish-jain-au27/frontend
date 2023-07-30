@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -6,31 +6,20 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Link, json } from "react-router-dom";
+import { Link } from "react-router-dom";
 import baseURL from "../../utils/baseURL";
 import logo from "./logo3.png";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCategoriesAction } from "../../redux/slices/categories/categoriesSlice";
 
 export default function Navbar() {
-  //dispatch
-  const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(fetchCategoriesAction())
-  },[dispatch])
-  //get data from store
- const {categories}= useSelector(state=>state?.categories)
-
-  const categoriesToDisplay = categories?.categories?.slice(0,4);
+  const categoriesToDisplay = [];
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   //get cart items from local storage
   let cartItemsFromLocalStorage;
-  //get user data from local storage
   const user = JSON.parse(localStorage.getItem("userInfo"));
-
   const isLoggedIn = user?.token ? true : false;
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -83,19 +72,19 @@ export default function Navbar() {
                   {categoriesToDisplay?.length <= 0 ? (
                     <>
                       <Link
-                        to="/products?category=clothing"
+                        to='products?category=clothing'
                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         Clothing...
                       </Link>
 
                       <Link
-                        href="/"
+                        to="/"
                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         Men
                       </Link>
 
                       <Link
-                        href="/"
+                        to="/"
                         className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                         Women
                       </Link>
@@ -118,26 +107,25 @@ export default function Navbar() {
 
                 {/* mobile links register/login */}
                 <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                   {!isLoggedIn && (
+                  {!isLoggedIn && (
                     <>
-                      <div className="flow-root">
-                        <Link
-                          to="/register"
-                          className="-m-2 block p-2 font-medium text-gray-900"
-                        >
-                          Create an account
-                        </Link>
-                      </div>
-                      <div className="flow-root">
-                        <Link
-                          to="/login"
-                          className="-m-2 block p-2 font-medium text-gray-900"
-                        >
-                          Sign in
-                        </Link>
-                      </div>
-                    </>
-                  )}
+                
+                  <div className="flow-root">
+                    <Link
+                      to="/register"
+                      className="-m-2 block p-2 font-medium text-gray-900">
+                      Create an account
+                    </Link>
+                  </div>
+                  <div className="flow-root">
+                    <Link
+                      to="/login"
+                      className="-m-2 block p-2 font-medium text-gray-900">
+                      Sign in
+                    </Link>
+                  </div>
+                  </>
+                    )}
                 </div>
 
                 <div className="space-y-6 border-t border-gray-200 py-6 px-4"></div>
@@ -149,15 +137,12 @@ export default function Navbar() {
 
       <header className="relative z-10">
         <nav aria-label="Top">
-          {/* Top navigation  desktop*/}
-          <div className="bg-gray-900">
-            <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              <p className="flex-1 text-center text-sm font-medium text-white lg:flex-none">
-                Get free delivery on orders over $100
-              </p>
-
-              <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-              {!isLoggedIn && (
+            {/* Top navigation  desktop*/}
+            {!isLoggedIn && (
+            <div className="bg-gray-800">
+              <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                  {!isLoggedIn && (
                     <>
                       <Link
                         to="/register"
@@ -177,10 +162,10 @@ export default function Navbar() {
                       </Link>
                     </>
                   )}
+                </div>
               </div>
             </div>
-          </div>
-
+          )}
           {/* Deskto Navigation */}
           <div className="bg-white">
             <div className="border-b border-gray-200">
@@ -204,23 +189,23 @@ export default function Navbar() {
                       <div className="flex h-full justify-center space-x-8">
                         {categoriesToDisplay?.length <= 0 ? (
                           <>
-                            <a
-                              href={`${baseURL}/products?category=clothing`}
-                              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
-                              Clothing...
-                            </a>
+                              <Link
+                        to='products?category=clothing'
+                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                        Clothing...
+                      </Link>
 
-                            <a
-                              href="/"
-                              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
-                              Men
-                            </a>
+                      <Link
+                        to="/"
+                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                        Men
+                      </Link>
 
-                            <a
-                              href="/"
-                              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
-                              Women
-                            </a>
+                      <Link
+                        to="/"
+                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                        Women
+                      </Link>
                           </>
                         ) : (
                           categoriesToDisplay?.map((category) => {
@@ -263,7 +248,7 @@ export default function Navbar() {
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
                       <div className="flex space-x-8">
-                        {!isLoggedIn && <div className="flex">
+                        {isLoggedIn && <div className="flex">
                           <Link
                             to="/customer-profile"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500">
