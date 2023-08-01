@@ -1,7 +1,8 @@
-import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../utils/baseURL";
-import { data } from "autoprefixer";
+
+import { resetErrAction, resetSuccessAction } from "../../globalActions/globalAction";
+import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 
 //initial state
 const initialState = {
@@ -18,8 +19,13 @@ const initialState = {
 export const createCategoryAction = createAsyncThunk('category/create',
 async(payload,{rejectWithValue,getState,dispatch})=>{
     try {
-        const{ name }=payload;
-        //make request
+        const{ name ,file }=payload;
+  //form data
+  const formData = new FormData();
+  formData.append('name',name)
+  formData.append('file',file)
+
+  
 
         //token-authenticated
         const token = getState()?.users?.userAuth?.userInfo?.token;
@@ -31,9 +37,8 @@ async(payload,{rejectWithValue,getState,dispatch})=>{
         }
         //Images
 
-        const {data} = await axios.post(`${baseURL}/categories`,{
-            name 
-        },
+        const {data} = await axios.post(`${baseURL}/categories`,
+        formData,
         config
         );
         return data;
@@ -89,6 +94,14 @@ const categorySlice = createSlice({
         state.loading = false;
         state.categories = null;
         state.error = action.payload;
+      });
+      //reset err action
+      builder.addCase(resetErrAction.pending,(state,action)=>{
+        state.error = null;
+      });
+      //reset success action
+      builder.addCase(resetSuccessAction.pending,(state,action)=>{
+        state.isAdded =true;
       });
       },
 });
