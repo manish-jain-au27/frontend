@@ -2,6 +2,7 @@ import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../utils/baseURL";
 import { data } from "autoprefixer";
+import { resetErrAction, resetSuccessAction } from "../../globalActions/globalAction";
 
 //initial state
 const initialState = {
@@ -16,9 +17,9 @@ const initialState = {
 
 //create brand action
 export const createBrandAction = createAsyncThunk('brand/create',
-async(payload,{rejectWithValue,getState,dispatch})=>{
+async(name,{rejectWithValue,getState,dispatch})=>{
     try {
-        const{ name }=payload;
+   
         //make request
 
         //token-authenticated
@@ -90,6 +91,18 @@ const brandsSlice = createSlice({
         state.brands = null;
         state.error = action.payload;
       });
+      //reset error action
+      builder.addCase(resetErrAction.pending,(state,action)=>{
+       
+        state.isAdded = false;
+        state.error = null;
+      });
+        //reset success action
+        builder.addCase(resetSuccessAction.pending,(state,action)=>{
+       
+          state.isAdded = false;
+          state.error = null;
+        });
       },
 });
 

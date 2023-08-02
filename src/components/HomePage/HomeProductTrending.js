@@ -2,12 +2,20 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchProductsAction } from "../../redux/slices/products/productSlices";
+import baseURL from "../../utils/baseURL";
 
 const HomeProductTrending = () => {
+  
+//build up url
+let productUrl = `${baseURL}/products`;
+
   //disaptch
   const dispatch = useDispatch();
   useEffect(()=>{
-    dispatch(fetchProductsAction());
+    dispatch(
+      fetchProductsAction({
+      url : productUrl,
+    }));
   },[dispatch]);
   //get data from store
  const{products:{products},error,loading}= useSelector((state)=>state?.products);

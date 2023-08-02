@@ -6,10 +6,11 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { changeOrderItemQty, getCartItemsFromLocalStorageAction, removeOrderItemQty } from "../../../redux/slices/cart/cartSlices";
 
 export default function ShoppingCart() {
-  let cartItems;
-  let changeOrderItemQtyHandler;
+
   let removeOrderItemFromLocalStorageHandler;
   let calculateTotalDiscountedPrice;
   let error;
@@ -18,6 +19,30 @@ export default function ShoppingCart() {
   let setCoupon;
   let loading;
   let coupon;
+ //dispatch
+ const dispatch = useDispatch();
+ useEffect(() => {
+   dispatch(getCartItemsFromLocalStorageAction());
+ }, [dispatch]);
+  //get cart items from store
+  const { cartItems } = useSelector((state) => state?.carts);
+  //add to cart handler
+  const changeOrderItemQtyHandler = (productId,qty)=>{
+    dispatch(changeOrderItemQty({productId,qty}))
+    dispatch(getCartItemsFromLocalStorageAction());
+
+  }
+
+  //calculate total price
+  const sumTotalPrice = cartItems?.reduce((acc,current)=>{
+    return acc + current?.totalPrice
+  },0)
+  console.log(sumTotalPrice)
+//remove cart item handler
+  const removeOrderItemQtyFromHandler = (productId)=>{
+    dispatch(removeOrderItemQty(productId))
+    dispatch(getCartItemsFromLocalStorageAction());
+  }
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -37,8 +62,8 @@ export default function ShoppingCart() {
                 <li key={product._id} className="flex py-6 sm:py-10">
                   <div className="flex-shrink-0">
                     <img
-                      src={product.imageSrc}
-                      alt={product.imageAlt}
+                      src={product.image}
+                      alt={product.name}
                       className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                     />
                   </div>
@@ -48,23 +73,23 @@ export default function ShoppingCart() {
                       <div>
                         <div className="flex justify-between">
                           <h3 className="text-sm">
-                            <a
-                              href={product.href}
-                              className="font-medium text-gray-700 hover:text-gray-800">
+                            <p className="font-medium text-gray-700 hover:text-gray-800">
                               {product.name}
-                            </a>
+                            </p>
                           </h3>
                         </div>
                         <div className="mt-1 flex text-sm">
                           <p className="text-gray-500">{product.color}</p>
-                          {product.size ? (
+                      
                             <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
                               {product.size}
                             </p>
-                          ) : null}
+                        
                         </div>
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          $ {product.discountedPrice} X {product.qty}
+                        Rs.{product?.price} x {product?.qty} = Rs.{product?.totalPrice}
+                        
+
                         </p>
                       </div>
 
@@ -73,26 +98,26 @@ export default function ShoppingCart() {
                           Quantity, {product.name}
                         </label>
                         <select
-                          onChange={(e) =>
-                            changeOrderItemQtyHandler(
-                              product?.productID,
-                              e.target.value
-                            )
+                         
+                          onChange={(e)=>
+                            changeOrderItemQtyHandler(product?._id, e.target.value)
                           }
                           className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                           {/* use the qty  */}
+                          {[...Array(product?.qtyLeft).keys()].map((x)=>{
+                           return ( <option key={x} value={x +1}>
+                            {x+1}
+                          </option>
+                          )
+                          })}
 
-                          {[...Array(product?.qtyLeft).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
+                        
                         </select>
                         {/* remove */}
                         <div className="absolute top-0 right-0">
                           <button
                             onClick={() =>
-                              removeOrderItemFromLocalStorageHandler(
+                              removeOrderItemQtyFromHandler(
                                 product?._id
                               )
                             }
@@ -123,7 +148,7 @@ export default function ShoppingCart() {
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
                 <dd className="text-sm font-medium text-gray-900">
-                  $ {calculateTotalDiscountedPrice().toFixed(2)}
+                  Rs.{sumTotalPrice}.00
                 </dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4"></div>
@@ -168,7 +193,7 @@ export default function ShoppingCart() {
                   Order total
                 </dt>
                 <dd className=" text-xl font-medium text-gray-900">
-                  $ {calculateTotalDiscountedPrice().toFixed(2)}
+                  Rs. 999
                 </dd>
               </div>
             </dl>

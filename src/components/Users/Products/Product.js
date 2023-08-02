@@ -8,6 +8,8 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductAction } from "../../../redux/slices/products/productSlices";
+import { addOrderToCartaction,getCartItemsFromLocalStorageAction } from "../../../redux/slices/cart/cartSlices";
+import Swal from "sweetalert2";
 const product = {
   name: "Basic Tee",
   price: "$35",
@@ -90,13 +92,11 @@ export default function Product() {
   const dispatch = useDispatch();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+ 
 
-  //Add to cart handler
-  const addToCartHandler = (item) => {};
   let productDetails = {};
-  let productColor;
-  let productSize;
-  let cartItems = [];
+  
+
   //get id from params
   const {id} = useParams();
   useEffect(()=>{
@@ -104,8 +104,65 @@ export default function Product() {
   },[id]);
 
   //get data from store
- const{loading,error,product:{product}} =useSelector(state=>state?.products)
-console.log(product)
+ const{loading,error,product:{product}} =useSelector(state=>state?.products);
+ 
+   //get cart items
+  
+   useEffect(()=>{
+    dispatch(getCartItemsFromLocalStorageAction())
+  },[]);
+ //get data from store
+ const{cartItems  }=useSelector(state=>state?.carts);
+ const productExists = cartItems?.find((item)=>item?._id?.toString() === product?._id.toString())
+ console.log(productExists)
+
+  //Add to cart handler
+  const addToCartHandler = (item) => {
+    //check if product is in cart
+    if(productExists){
+      return Swal.fire({
+        icon: "error",
+        title:"oops...",
+        text: 'This product is already in cart',
+      });
+    }
+    //check if color/size is selected
+    if(selectedColor  === ''){
+      return Swal.fire({
+        icon: "error",
+        title:"oops...",
+        text: 'please select product color',
+      });
+    }
+    if(selectedSize  === ''){
+      return Swal.fire({
+        icon: "error",
+        title:"oops...",
+        text: "please select product size",
+      });
+    }
+    dispatch(addOrderToCartaction({
+      _id: product?._id,
+      name: product?.name,
+      qty: 1 ,
+      price: product?.price,
+      description: product?.description,
+      color: selectedColor,
+      size: selectedSize,
+      image: product?.images[0],
+      totalPrice: product?.price,
+      qtyLeft:product?.qtyLeft,
+      
+    })
+    );
+     Swal.fire({
+      icon: "success",
+      title:"Good Job !",
+      text: 'Product added to cart successfully',
+    });
+    return dispatch(getCartItemsFromLocalStorageAction())
+  }; 
+  
   return (
     <div className="bg-white">
       <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8">

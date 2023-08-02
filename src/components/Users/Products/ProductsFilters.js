@@ -6,7 +6,7 @@ import {
   Transition,
   RadioGroup,
 } from "@headlessui/react";
-
+import { useDispatch, useSelector } from "react-redux";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
@@ -15,6 +15,15 @@ import {
   PlusIcon,
 } from "@heroicons/react/20/solid";
 import Products from "./Products";
+import { useSearchParams  } from "react-router-dom";
+import baseURL from "../../../utils/baseURL";
+import { fetchProductsAction } from "../../../redux/slices/products/productSlices";
+import { fetchBrandsAction } from "../../../redux/slices/categories/brandsSlice";
+import { fetchColorsAction } from "../../../redux/slices/categories/colorsSlice";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
+import ErrorMsg from "../../ErrorMsg/ErrorMsg";
+import NoDataFound from "../../NoDataFound/NoDataFound";
+
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -23,6 +32,8 @@ const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
 ];
+
+
 
 const allPrice = [
   {
@@ -56,32 +67,86 @@ function classNames(...classes) {
 }
 
 const sizeCategories = [
-  "XXS",
-  "XS",
+  
   "S",
   "M",
   "L",
   "XL",
   "XXL",
   "XXXL",
-  "XXXXL",
 ];
 
 export default function ProductsFilters() {
+  //dispatch
+  const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  //get query string
+  const [params , setParams] = useSearchParams();
+const category = params.get('category');
+//filters
+const [color , setColor] = useState('')
+const [price , setPrice] = useState('')
+const [brand , setBrand] = useState('')
+const [size , setSize] = useState('')
+console.log(price)
+//build up url
+let productUrl = `${baseURL}/products`;
+if(category){
+  productUrl = `${baseURL}/products?category=${category}`
+}
+if(brand){
+  productUrl = `${productUrl}&brand=${brand}`
 
+};
+if(size){
+  productUrl = `${productUrl}&size=${size}`
+}
+if(price){
+  productUrl = `${productUrl}&price=${price}`
+}
+if(color){
+  productUrl = `${productUrl}&color=${color?.name}`
+}
+//fetch all products
+useEffect(()=>{
+dispatch(fetchProductsAction({
+  url : productUrl,
+}))
+},[dispatch,category,size,brand,price,color]
+);
+//get data from store
+const {products : {products} , loading , error}=useSelector(state=>state?.products)
+
+
+
+//fetch brands
+useEffect(()=>{
+  dispatch(fetchBrandsAction({
+    url : productUrl,
+  }))
+  },[dispatch]
+  );
+  //get data from store
+  const {brands : {brands}}=useSelector(state=>state?.brands)
+
+  //fetch colors
+useEffect(()=>{
+  dispatch(fetchColorsAction({
+    url : productUrl,
+  }))
+  },[dispatch]
+  );
+
+  //get data from store
+  const {colors : {colors}}=useSelector(state=>state?.colors)
+
+  
   let colorsLoading;
   let colorsError;
-  let colors;
-  let setPrice;
-  let brands;
-  let setSize;
-  let setColor;
-  let setBrand;
   let productsLoading;
   let productsError;
-  let products;
+  
 
   return (
     <div className="bg-white">
@@ -372,16 +437,16 @@ export default function ProductsFilters() {
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
-                              {sizeCategories.map((option) => (
-                                <div key={option} className="flex items-center">
+                              {sizeCategories.map((size) => (
+                                <div key={size} className="flex items-center">
                                   <input
                                     type="radio"
                                     name="size"
-                                    onClick={() => setSize(option)}
+                                    onClick={() => setSize(size)}
                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                   />
                                   <label className="ml-3 min-w-0 flex-1 text-gray-500">
-                                    {option}
+                                    {size}
                                   </label>
                                 </div>
                               ))}
@@ -480,7 +545,7 @@ export default function ProductsFilters() {
                       <h3 className="-mx-2 -my-3 flow-root">
                         <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
                           <span className="font-medium text-gray-900">
-                            Colors Categories
+                            Colors 
                           </span>
                           <span className="ml-6 flex items-center">
                             {open ? (
@@ -687,13 +752,12 @@ export default function ProductsFilters() {
               </form>
 
               {/* Product grid */}
-              {productsLoading ? (
-                <h2 className="text-xl">Loading...</h2>
-              ) : productsError ? (
-                <h2 className="text-red-500">{productsError}</h2>
-              ) : (
-                <Products products={products} />
-              )}
+            {loading ? (< LoadingComponent/>
+            ) : error ? (< ErrorMsg message={error?.message}/>
+            ):products ?.length <=0 ? (<NoDataFound/>
+            ):  (
+            <Products products={products}/>
+            ) } 
             </div>
           </section>
         </main>
