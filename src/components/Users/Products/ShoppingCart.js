@@ -8,22 +8,28 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeOrderItemQty, getCartItemsFromLocalStorageAction, removeOrderItemQty } from "../../../redux/slices/cart/cartSlices";
+import { fetchCouponAction } from "../../../redux/slices/coupons/couponsSlice";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
+import SuccessMsg from "../../SuccessMsg/SuccessMsg";
+import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 
 export default function ShoppingCart() {
 
-  let removeOrderItemFromLocalStorageHandler;
-  let calculateTotalDiscountedPrice;
-  let error;
-  let couponFound;
-  let applyCouponSubmit;
-  let setCoupon;
-  let loading;
-  let coupon;
  //dispatch
  const dispatch = useDispatch();
  useEffect(() => {
    dispatch(getCartItemsFromLocalStorageAction());
  }, [dispatch]);
+ // coupon state
+ const [couponCode, setCouponCode] = useState(null);
+const applyCouponSubmit = (e)=>{
+  e.preventDefault()
+  
+  dispatch(fetchCouponAction(coupon))
+  setCouponCode("");
+}
+ //get coupon from store
+ const { coupon,loading,error,isAdded } = useSelector((state) => state?.coupons);
   //get cart items from store
   const { cartItems } = useSelector((state) => state?.carts);
   //add to cart handler
@@ -34,9 +40,16 @@ export default function ShoppingCart() {
   }
 
   //calculate total price
-  const sumTotalPrice = cartItems?.reduce((acc,current)=>{
+  let sumTotalPrice = 0;
+   sumTotalPrice = cartItems?.reduce((acc,current)=>{
     return acc + current?.totalPrice
   },0)
+
+  //check if coupon found
+  if(coupon){
+    sumTotalPrice = sumTotalPrice - (sumTotalPrice * coupon?.coupon?.discount / 100)
+  }
+
   console.log(sumTotalPrice)
 //remove cart item handler
   const removeOrderItemQtyFromHandler = (productId)=>{
@@ -157,30 +170,24 @@ export default function ShoppingCart() {
                 <span>Have coupon code? </span>
               </dt>
               {/* errr */}
-              {error && <span className="text-red-500">{error?.message}</span>}
-              {/* success */}
-              {couponFound?.status === "success" && !error && (
-                <span className="text-green-800">
-                  Congrats! You have got{" "}
-                  {couponFound?.coupon?.discountInPercentage} % discount
-                </span>
+              {error && <ErrorMsg message={error?.message}/>}
+              {isAdded && (<SuccessMsg message={`congratulations you got ${coupon?.coupon?.discount}%`}
+              />
               )}
+              {/* success */}
+             
               <form onSubmit={applyCouponSubmit}>
                 <div className="mt-1">
                   <input
-                    value={coupon}
-                    onChange={(e) => setCoupon(e.target.value)}
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
                     type="text"
                     className="block w-full rounded-md border p-2 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="you@example.com"
+                    placeholder="Enter Coupon Code"
                   />
                 </div>
                 {loading ? (
-                  <button
-                    disabled
-                    className="inline-flex  text-center mt-4 items-center rounded border border-transparent bg-gray-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    Loading Please Wait...
-                  </button>
+                  <LoadingComponent/>
                 ) : (
                   <button className="inline-flex  text-center mt-4 items-center rounded border border-transparent bg-green-600 px-2.5 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     Apply coupon
@@ -193,7 +200,7 @@ export default function ShoppingCart() {
                   Order total
                 </dt>
                 <dd className=" text-xl font-medium text-gray-900">
-                  Rs. 999
+                  Rs. {sumTotalPrice}
                 </dd>
               </div>
             </dl>
@@ -201,9 +208,14 @@ export default function ShoppingCart() {
             <div className="mt-6">
               <Link
                 //  pass data to checkout page
-                to={{
-                  pathname: "/order-payment",
-                }}
+                
+                to=  "/order-payment"
+                state={
+                  {
+                     sumTotalPrice,
+                  }
+                }
+                
                 className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
                 Proceed to Checkout
               </Link>

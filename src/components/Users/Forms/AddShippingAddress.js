@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { updateUserShippingAddressAction } from "../../../redux/slices/users/userSlices";
+import { useDispatch, useSelector } from "react-redux";
 
 const AddShippingAddress = () => {
+  //dispatch
+  const dispatch = useDispatch();
   //user profile
   const { user } = {};
 
   const [formData, setFormData] = useState({
-    firstName: user?.shippingAddress?.firstName,
+    firstName:"",
     lastName: "",
     address: "",
     city: "",
@@ -22,6 +26,7 @@ const AddShippingAddress = () => {
   //onsubmit
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateUserShippingAddressAction(formData));
   };
 
   return (

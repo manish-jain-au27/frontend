@@ -41,6 +41,37 @@ const initialState = {
     });
 
 
+
+    //update user shipping address
+  export const updateUserShippingAddressAction = createAsyncThunk(
+    "users/update-shipping-address",
+    async ({firstName,lastName,address,city,postalCode,province,phone,country},
+      {rejectWithValue,getState,dispatch})=>{
+
+      try {
+        //get token
+        const token = getState()?.users?.userAuth?.userInfo?.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+        
+          },
+        };
+        //make http request
+        const {data} = await axios.put(`${baseURL}/users/update/shipping`,{
+          firstName,lastName,address,city,postalCode,province,phone,country 
+        },config
+        );
+   
+        return data;
+  
+      } catch (error) {
+        return rejectWithValue(error?.response?.data)
+      }
+    });
+
+
+
   //login action
 export const loginUserAction = createAsyncThunk(
     "users/login",
@@ -93,6 +124,20 @@ const usersSlice = createSlice({
         state.error = action.payload;
         state.loading = false;
       }); 
+            //update shipping address
+            builder.addCase(updateUserShippingAddressAction.pending, (state, action)=>{
+              state.loading = true;
+            });
+            builder.addCase(updateUserShippingAddressAction.fulfilled,(state,action)=>{
+              state.user = action.payload;
+              state.loading = false;
+            });
+            builder.addCase(updateUserShippingAddressAction.rejected,(state,action)=>{
+              state.error = action.payload;
+              state.loading = false;
+            }); 
+
+
      //reset error action
      builder.addCase(resetErrAction.pending, (state) => {
       state.error = null;
