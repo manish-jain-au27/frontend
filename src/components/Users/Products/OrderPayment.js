@@ -3,7 +3,10 @@ import { useLocation } from "react-router-dom";
 import AddShippingAddress from "../Forms/AddShippingAddress";
 import { useEffect } from "react";
 import { getCartItemsFromLocalStorageAction } from "../../../redux/slices/cart/cartSlices";
-
+import { placeOrderAction } from "../../../redux/slices/orders/orderSlices";
+import { getUserProfileAction } from "../../../redux/slices/users/userSlices";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
+import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 
 export default function OrderPayment() {
  //get data from location
@@ -18,11 +21,33 @@ useEffect(() => {
 //get cart items from store
 const { cartItems } = useSelector((state) => state?.carts);
   //create order submit handler
-  const createOrderSubmitHandler = (e) => {
-    e.preventDefault();
-  };
+  // const createOrderSubmitHandler = (e) => {
+  //   e.preventDefault();
+  // };
+  //user profile
+  useEffect(() => {
+    dispatch(getUserProfileAction());
+  }, [dispatch]);
+  const { loading, error, profile } = useSelector((state) => state?.users);
+  const user = profile?.user;
+//get shipping address
+//place order action
+const shippingAddress = user?.shippingAddress;
+const placeOrderHandler = ()=>{
+  dispatch(placeOrderAction({
+    shippingAddress,
+    orderItems: cartItems,
+    totalPrice: sumTotalPrice
+  }))
+  //empty cart items
+  //localStorage.removeItem('cartItems')
+};
+
+const { loading:orderLoading, error:orderErr } = useSelector((state) => state?.orders);
 
   return (
+    <>
+    {orderErr && <ErrorMsg message={orderErr.message}/>}
     <div className="bg-gray-50">
       <main className="mx-auto max-w-7xl px-4 pt-16 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none">
@@ -93,11 +118,11 @@ const { cartItems } = useSelector((state) => state?.carts);
                 </dl>
 
                 <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                  <button
-                    onClick={createOrderSubmitHandler}
+                  {orderLoading ? <LoadingComponent/> :<button
+                    onClick={placeOrderHandler}
                     className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
-                    Confirm Payment - ${calculateTotalDiscountedPrice()}
-                  </button>
+                    Confirm Payment - Rs.{sumTotalPrice}
+                  </button>}
                 </div>
               </div>
             </div>
@@ -105,5 +130,6 @@ const { cartItems } = useSelector((state) => state?.carts);
         </div>
       </main>
     </div>
+    </>
   );
 }

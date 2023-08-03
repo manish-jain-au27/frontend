@@ -32,6 +32,9 @@ import Customers from "./components/Admin/Orders/Customers";
 import BrandsColorsList from "./components/Admin/Categories/BrandsColorsList";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 import AdminRoute from "./components/AuthRoute/AdminRoute";
+import ThanksForOrdering from "./components/Users/Products/ThanksForOrdering";
+import ProductUpdate from "./components/Admin/Products/ProductUpdate";
+
 
 const App = () => {
   return (
@@ -46,7 +49,7 @@ const App = () => {
           {/* products */} <Route path="" element={<OrdersList />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="manage-products" element={<ManageStocks />} />
-          <Route path="products/edit/:id" element={<UpdateProduct />} />
+          <Route path="products/edit/:id" element={<ProductUpdate />} />
           {/* coupons */}
           <Route path="add-coupon" element={<AddCoupon />} />
           <Route path="manage-coupon" element={<ManageCoupons />} />
@@ -66,6 +69,7 @@ const App = () => {
           <Route path="manage-orders" element={<ManageOrders />} />
           <Route path="order-payment" element={<OrderPayment />} />
           <Route path="customers" element={<Customers />} />
+
         </Route>
         {/* public links */}
         {/* Products */}
@@ -73,6 +77,8 @@ const App = () => {
         <Route path="/products-filters" element={<ProductsFilters />} />
         <Route path="/products/:id" element={<Product />} />
         <Route path="/all-categories" element={<AllCategories />} />
+        <Route path="/success" element={<ThanksForOrdering />} />
+
         {/* review */}
         <Route path="/add-review/:id" element={<AddReview />} />
 
