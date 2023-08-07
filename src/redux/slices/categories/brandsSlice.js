@@ -1,113 +1,111 @@
-import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import baseURL from "../../../utils/baseURL";
-import { data } from "autoprefixer";
-import { resetErrAction, resetSuccessAction } from "../../globalActions/globalAction";
+import {
+  resetErrAction,
+  resetSuccessAction,
+} from "../globalActions/globalActions";
+const { createAsyncThunk, createSlice } = require("@reduxjs/toolkit");
 
-//initial state
+//initalsState
 const initialState = {
-    brands : [],
-    brand : {},
-    loading : false, 
-    error : null,
-    isAdded : false,
-    isUpdated : false,
-    isDeleted : false
-}
+  brands: [],
+  brand: {},
+  loading: false,
+  error: null,
+  isAdded: false,
+  isUpdated: false,
+  isDelete: false,
+};
 
 //create brand action
-export const createBrandAction = createAsyncThunk('brand/create',
-async(name,{rejectWithValue,getState,dispatch})=>{
+export const createBrandAction = createAsyncThunk(
+  "brand/create",
+  async (name, { rejectWithValue, getState, dispatch }) => {
     try {
-   
-        //make request
-
-        //token-authenticated
-        const token = getState()?.users?.userAuth?.userInfo?.token;
-        const config ={
-            headers: {
-                Authorization: `Bearer ${token}`,
-               
-              },
-        }
-        //Images
-
-        const {data} = await axios.post(`${baseURL}/brands`,{
-            name 
+      //Token - Authenticated
+      const token = getState()?.users?.userAuth?.userInfo?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      //Images
+      const { data } = await axios.post(
+        `${baseURL}/brands`,
+        {
+          name,
         },
         config
-        );
-        return data;
+      );
+      return data;
     } catch (error) {
-        return rejectWithValue(error?.response?.data);
+      return rejectWithValue(error?.response?.data);
     }
-});
+  }
+);
 
-///fetch brands action
+//fetch brands action
 export const fetchBrandsAction = createAsyncThunk(
-    "brands/fetch All",
-    async (payload, { rejectWithValue, getState, dispatch }) => {
-      try {
-        const { data } = await axios.get(`${baseURL}/brands`);
-        return data;
-      } catch (error) {
-        return rejectWithValue(error?.response?.data);
-      }
+  "brands/fetch All",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const { data } = await axios.get(`${baseURL}/brands`);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
     }
-  );
-  
-
-//create brands
+  }
+);
+//slice
 const brandsSlice = createSlice({
-    name: "brands",
-    initialState,extraReducers:(builder)=>{
-        //create
-        builder.addCase(createBrandAction.pending, (state)=>{
-            state.loading = true;
+  name: "brands",
+  initialState,
+  extraReducers: (builder) => {
+    //create
+    builder.addCase(createBrandAction.pending, (state) => {
+      state.loading = true;
     });
-      
-    builder.addCase(createBrandAction.fulfilled, (state,action)=>{
-        state.loading = false;
-        state.brand = action.payload;
-        state.isAdded = true;
+    builder.addCase(createBrandAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.brand = action.payload;
+      state.isAdded = true;
     });
-    builder.addCase(createBrandAction.rejected, (state,action)=>{
-        state.loading = false;
-        state.brand = null;
-        state.isAdded = false;
-        state.error = action.payload;
+    builder.addCase(createBrandAction.rejected, (state, action) => {
+      state.loading = false;
+      state.brand = null;
+      state.isAdded = false;
+      state.error = action.payload;
     });
-    
+
     //fetch all
     builder.addCase(fetchBrandsAction.pending, (state) => {
-        state.loading = true;
-      });
-      builder.addCase(fetchBrandsAction.fulfilled, (state, action) => {
-        state.loading = false;
-        state.brands = action.payload;
-      });
-      builder.addCase(fetchBrandsAction.rejected, (state, action) => {
-        state.loading = false;
-        state.brands = null;
-        state.error = action.payload;
-      });
-      //reset error action
-      builder.addCase(resetErrAction.pending,(state,action)=>{
-       
-        state.isAdded = false;
-        state.error = null;
-      });
-        //reset success action
-        builder.addCase(resetSuccessAction.pending,(state,action)=>{
-       
-          state.isAdded = false;
-          state.error = null;
-        });
-      },
+      state.loading = true;
+    });
+    builder.addCase(fetchBrandsAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.brands = action.payload;
+      state.isAdded = true;
+    });
+    builder.addCase(fetchBrandsAction.rejected, (state, action) => {
+      state.loading = false;
+      state.brands = null;
+      state.isAdded = false;
+      state.error = action.payload;
+    });
+    //reset error action
+    builder.addCase(resetErrAction.pending, (state, action) => {
+      state.isAdded = false;
+      state.error = null;
+    });
+    //reset success action
+    builder.addCase(resetSuccessAction.pending, (state, action) => {
+      state.isAdded = false;
+      state.error = null;
+    });
+  },
 });
 
-
-
-//generate reducer
+//generate the reducer
 const brandsReducer = brandsSlice.reducer;
+
 export default brandsReducer;

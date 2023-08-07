@@ -5,21 +5,24 @@ import { fetchProductsAction } from "../../redux/slices/products/productSlices";
 import baseURL from "../../utils/baseURL";
 
 const HomeProductTrending = () => {
-  
-//build up url
-let productUrl = `${baseURL}/products`;
-
-  //disaptch
+  //build up url
+  let productUrl = `${baseURL}/products`;
+  //dispatch
   const dispatch = useDispatch();
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(
       fetchProductsAction({
-      url : productUrl,
-    }));
-  },[dispatch]);
+        url: productUrl,
+      })
+    );
+  }, [dispatch]);
   //get data from store
- const{products:{products},error,loading}= useSelector((state)=>state?.products);
- console.log(products)
+  const {
+    products: { products },
+    error,
+    loading,
+  } = useSelector((state) => state?.products);
+  console.log(products);
   const trendingProducts = [];
   return (
     <>
@@ -53,14 +56,14 @@ let productUrl = `${baseURL}/products`;
                   />
                 </div>
                 <h3 className="mt-4 text-sm text-gray-700">
-              
-                    <span className="absolute inset-0" />
-                    {product.name}
-                  
+                  <span className="absolute inset-0" />
+                  {product.name}
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">{product.description}</p>
                 <p className="mt-1 text-sm font-medium text-gray-900">
-                  Rs.{product.price}.00
+                  ${product.price}.00
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  {product.description}
                 </p>
               </Link>
             ))}

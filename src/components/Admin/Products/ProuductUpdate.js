@@ -93,7 +93,7 @@ export default function ProductUpdate() {
     brand: "",
     colors: "",
     price: product?.product?.price,
-    totalQty:product?.product?.totalQty,
+    totalQty: product?.product?.totalQty,
   });
 
   //onChange

@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import { fetchBrandsAction } from "../../../redux/slices/categories/brandsSlice";
+import { fetchCategoriesAction } from "../../../redux/slices/categories/categoriesSlice";
+import { fetchColorsAction } from "../../../redux/slices/categories/colorsSlice";
+import { createProductAction } from "../../../redux/slices/products/productSlices";
 
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import SuccessMsg from "../../SuccessMsg/SuccessMsg";
-import { createProductAction } from "../../../redux/slices/products/productSlices";
-import { fetchCategoriesAction } from "../../../redux/slices/categories/categoriesSlice";
-import { fetchBrandsAction } from "../../../redux/slices/categories/brandsSlice";
-import { fetchColorsAction } from "../../../redux/slices/categories/colorsSlice";
-
 
 //animated components for react-select
 const animatedComponents = makeAnimated();
-
 
 export default function AddProduct() {
   const dispatch = useDispatch();
@@ -27,7 +25,7 @@ export default function AddProduct() {
     //validation
     const newErrs = [];
     newFiles.forEach((file) => {
-      if (file?.size > 3000000) {
+      if (file?.size > 1000000) {
         newErrs.push(`${file?.name} is too large`);
       }
       if (!file?.type?.startsWith("image/")) {
@@ -132,7 +130,6 @@ export default function AddProduct() {
       totalQty: "",
     });
   };
-
 
   return (
     <>

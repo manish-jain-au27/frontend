@@ -4,15 +4,16 @@ import { Link } from "react-router-dom";
 import { fetchCategoriesAction } from "../../redux/slices/categories/categoriesSlice";
 
 const AllCategories = () => {
-    //dispatch
-    const dispatch = useDispatch();
-    useEffect(() => {
-      dispatch(fetchCategoriesAction());
-    }, [dispatch]);
-    //get data from store
-    const { categories:{categories} } = useSelector((state) => state?.categories);
-  
- 
+  //dispatch
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCategoriesAction());
+  }, [dispatch]);
+
+  //get data from store
+  const {
+    categories: { categories },
+  } = useSelector((state) => state?.categories);
 
   return (
     <>

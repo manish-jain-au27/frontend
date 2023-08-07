@@ -1,15 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { fetchProductsAction } from "../../../redux/slices/products/productSlices";
+import baseURL from "../../../utils/baseURL";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import NoDataFound from "../../NoDataFound/NoDataFound";
-import { fetchProductAction, fetchProductsAction } from "../../../redux/slices/products/productSlices";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import baseURL from "../../../utils/baseURL";
 
 export default function ManageStocks() {
-
-
   //delete product handler
   const deleteProductHandler = (id) => {};
   let productUrl = `${baseURL}/products`;
@@ -23,7 +21,11 @@ export default function ManageStocks() {
     );
   }, [dispatch]);
   //get data from store
- const{error,loading,products:{products}}= useSelector((state)=>state?.products)
+  const {
+    products: { products },
+    loading,
+    error,
+  } = useSelector((state) => state?.products);
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -129,15 +131,17 @@ export default function ManageStocks() {
                           <div className="text-gray-900">
                             {product?.category}
                           </div>
-                          
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {product ?.qtyLeft <=0 ? <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                          {product?.qtyLeft < 0 ? (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                               Out of Stock
-                            </span>:<span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            In Stock
-                          </span> }
-                          
+                            </span>
+                          ) : (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              In Stock
+                            </span>
+                          )}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {product?.totalQty}

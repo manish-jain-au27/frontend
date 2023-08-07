@@ -1,11 +1,3 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import ErrorComponent from "../../ErrorMsg/ErrorMsg";
-import SuccessMsg from "../../SuccessMsg/SuccessMsg";
-import LoadingComponent from "../../LoadingComp/LoadingComponent";
-import { createCategoryAction } from "../../../redux/slices/categories/categoriesSlice";
-
 export default function CategoryToAdd() {
   //dispatch
   const dispatch = useDispatch();
@@ -35,10 +27,10 @@ export default function CategoryToAdd() {
     setFile(newFile);
   };
   //get data from store
-  const { loading, error, isAdded } = useSelector(state => state?.categories);
+  const { loading, error, isAdded } = useSelector((state) => state?.categories);
   //onSubmit
   const handleOnSubmit = (e) => {
-   
+    console.log(file);
     e.preventDefault();
     //dispatch
     dispatch(
@@ -48,11 +40,12 @@ export default function CategoryToAdd() {
       })
     );
   };
+
   return (
     <>
       {error && <ErrorComponent message={error?.message} />}
       {fileErr && <ErrorComponent message={fileErr} />}
-      {isAdded && <SuccessMsg message="added" />}
+      {isAdded && <SuccessMsg message="Category added successfully" />}
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <svg

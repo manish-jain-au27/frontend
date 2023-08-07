@@ -41,13 +41,6 @@ export default function ThanksForOrdering() {
                 tight and we’ll send you confirmation very soon!
               </p>
 
-              
-
-              
-
-
-              
-
               <div className="mt-16 border-t border-gray-200 py-6 text-right">
                 <Link
                   to="/"

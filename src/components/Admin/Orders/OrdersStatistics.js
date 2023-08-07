@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { OrdersStatsAction } from "../../../redux/slices/orders/orderSlices";
+import { OrdersStatsAction } from "../../../redux/slices/orders/ordersSlices";
 
 export default function OrdersStats() {
   //dispatch
@@ -132,8 +132,8 @@ export default function OrdersStats() {
           </dt>
           <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
             <p className="text-2xl font-semibold text-gray-100">
-              {stats?.saleToday?.length <=0 ? 'Rs.00' : 0 }
-              
+              {" "}
+              ${statistics[2]}
             </p>
 
             <div className="absolute inset-x-0 bottom-0 bg-pink-900 px-4 py-4 sm:px-6">

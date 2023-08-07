@@ -1,21 +1,19 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserProfileAction } from "../../../redux/slices/users/userSlices";
+import { getUserProfileAction } from "../../../redux/slices/users/usersSlice";
 import CustomerDetails from "./CustomerDetails";
 import ShippingAddressDetails from "./ShippingAddressDetails";
-import { useEffect } from "react";
 
 export default function CustomerProfile() {
-
- 
   //dispatch
   const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(getUserProfileAction())
-  },[dispatch]);
+  useEffect(() => {
+    dispatch(getUserProfileAction());
+  }, [dispatch]);
   //get data from store
- const{error,loading,profile}= useSelector(state=>state?.users)
+  const { error, loading, profile } = useSelector((state) => state?.users);
   //get orders
-  const orders = profile?.user?.orders
+  const orders = profile?.user?.orders;
 
   return (
     <>
@@ -34,7 +32,7 @@ export default function CustomerProfile() {
       {loading ? (
         <h2>Loading...</h2>
       ) : error ? (
-        <h2>{error}</h2>
+        <h2>{error?.message}</h2>
       ) : orders?.length <= 0 ? (
         <h2 className="text-center mt-10">No Order Found</h2>
       ) : (

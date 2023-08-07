@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
+import Swal from "sweetalert2";
+
 import {
   CurrencyDollarIcon,
   GlobeAmericasIcon,
@@ -8,8 +10,10 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductAction } from "../../../redux/slices/products/productSlices";
-import { addOrderToCartaction,getCartItemsFromLocalStorageAction } from "../../../redux/slices/cart/cartSlices";
-import Swal from "sweetalert2";
+import {
+  addOrderToCartaction,
+  getCartItemsFromLocalStorageAction,
+} from "../../../redux/slices/cart/cartSlices";
 const product = {
   name: "Basic Tee",
   price: "$35",
@@ -68,7 +72,6 @@ const product = {
     "Machine wash cold with similar colors",
   ],
 };
-//dispatch
 
 const policies = [
   {
@@ -92,77 +95,78 @@ export default function Product() {
   const dispatch = useDispatch();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
- 
 
   let productDetails = {};
-  
 
   //get id from params
-  const {id} = useParams();
-  useEffect(()=>{
-    dispatch(fetchProductAction(id))
-  },[id]);
-
+  const { id } = useParams();
+  useEffect(() => {
+    dispatch(fetchProductAction(id));
+  }, [id]);
   //get data from store
- const{loading,error,product:{product}} =useSelector(state=>state?.products);
- 
-   //get cart items
-  
-   useEffect(()=>{
-    dispatch(getCartItemsFromLocalStorageAction())
-  },[]);
- //get data from store
- const{cartItems  }=useSelector(state=>state?.carts);
- const productExists = cartItems?.find((item)=>item?._id?.toString() === product?._id.toString())
- 
+  const {
+    loading,
+    error,
+    product: { product },
+  } = useSelector((state) => state?.products);
+
+  //Get cart items
+  useEffect(() => {
+    dispatch(getCartItemsFromLocalStorageAction());
+  }, []);
+  //get data from store
+  const { cartItems } = useSelector((state) => state?.carts);
+  const productExists = cartItems?.find(
+    (item) => item?._id?.toString() === product?._id.toString()
+  );
 
   //Add to cart handler
-  const addToCartHandler = (item) => {
+  const addToCartHandler = () => {
     //check if product is in cart
-    if(productExists){
+    if (productExists) {
       return Swal.fire({
         icon: "error",
-        title:"oops...",
-        text: 'This product is already in cart',
+        title: "Oops...",
+        text: "This product is already in cart",
       });
     }
-    //check if color/size is selected
-    if(selectedColor  === ''){
+    //check if color/size selected
+    if (selectedColor === "") {
       return Swal.fire({
         icon: "error",
-        title:"oops...",
-        text: 'please select product color',
+        title: "Oops...!",
+        text: "Please select product color",
       });
     }
-    if(selectedSize  === ''){
+    if (selectedSize === "") {
       return Swal.fire({
         icon: "error",
-        title:"oops...",
-        text: "please select product size",
+        title: "Oops...",
+        text: "Please select  p roduct size",
       });
     }
-    dispatch(addOrderToCartaction({
-      _id: product?._id,
-      name: product?.name,
-      qty: 1 ,
-      price: product?.price,
-      description: product?.description,
-      color: selectedColor,
-      size: selectedSize,
-      image: product?.images[0],
-      totalPrice: product?.price,
-      qtyLeft:product?.qtyLeft,
-      
-    })
+    dispatch(
+      addOrderToCartaction({
+        _id: product?._id,
+        name: product?.name,
+        qty: 1,
+        price: product?.price,
+        description: product?.description,
+        color: selectedColor,
+        size: selectedSize,
+        image: product?.images[0],
+        totalPrice: product?.price,
+        qtyLeft: product?.qtyLeft,
+      })
     );
-     Swal.fire({
+    Swal.fire({
       icon: "success",
-      title:"Good Job !",
-      text: 'Product added to cart successfully',
+      title: "Good Job",
+      text: "Product added to cart successfully",
     });
-    return dispatch(getCartItemsFromLocalStorageAction())
-  }; 
-  
+    return dispatch(getCartItemsFromLocalStorageAction());
+  };
+
   return (
     <div className="bg-white">
       <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8">
@@ -173,7 +177,7 @@ export default function Product() {
                 {product?.name}
               </h1>
               <p className="text-xl font-medium text-gray-900">
-                Rs.{product?.price}.00
+                $ {product?.price}.00
               </p>
             </div>
             {/* Reviews */}
@@ -181,8 +185,8 @@ export default function Product() {
               <h2 className="sr-only">Reviews</h2>
               <div className="flex items-center">
                 <p className="text-sm text-gray-700">
-                  {product?.reviews?.length > 0 ? product?.averageRating:0}
-                  {/*<span className="sr-only"> out of 5 stars</span>*/}
+                  {product?.reviews?.length > 0 ? product?.averageRating : 0}
+                  {/* <span className="sr-only"> out of 5 stars</span> */}
                 </p>
                 <div className="ml-1 flex items-center">
                   {[0, 1, 2, 3, 4].map((rating) => (
@@ -308,16 +312,20 @@ export default function Product() {
                 </RadioGroup>
               </div>
               {/* add to cart */}
-              {product?.qtyLeft <= 0 ? <button
-              style={{cursor:'not-allowed'}}
-                disabled
-                className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-600 py-3 px-8 text-base font-medium text-white  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Add to cart
-              </button> : <button
-                onClick={() => addToCartHandler()}
-                className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Add to cart
-              </button>}
+              {product?.qtyLeft <= 0 ? (
+                <button
+                  style={{ cursor: "not-allowed" }}
+                  disabled
+                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-600 py-3 px-8 text-base font-medium text-whitefocus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  Add to cart
+                </button>
+              ) : (
+                <button
+                  onClick={() => addToCartHandler()}
+                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  Add to cart
+                </button>
+              )}
               {/* proceed to check */}
 
               {cartItems.length > 0 && (
@@ -406,17 +414,17 @@ export default function Product() {
                     <h3 className="text-sm font-medium text-gray-900">
                       {review?.message}
                     </h3>
-
-                  
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-center text-sm lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:flex-col lg:items-start xl:col-span-3">
-                  <p className="font-medium text-gray-900">{review.user?.fullname}</p>
+                  <p className="font-medium text-gray-900">
+                    {review.user?.fullname}
+                  </p>
                   <time
                     dateTime={review.datetime}
                     className="ml-4 border-l border-gray-200 pl-4 text-gray-500 lg:ml-0 lg:mt-2 lg:border-0 lg:pl-0">
-                    { new Date(review.createdAt).toLocaleDateString()}
+                    {new Date(review.createdAt).toLocaleDateString()}
                   </time>
                 </div>
               </div>

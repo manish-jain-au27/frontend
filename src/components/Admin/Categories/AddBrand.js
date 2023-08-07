@@ -1,13 +1,12 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { createBrandAction } from "../../../redux/slices/categories/brandsSlice";
-import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import SuccessMsg from "../../SuccessMsg/SuccessMsg";
 
 export default function AddBrand() {
-  //dispatch
   const dispatch = useDispatch();
   //form data
   const [formData, setFormData] = useState({
@@ -24,16 +23,16 @@ export default function AddBrand() {
     dispatch(createBrandAction(formData?.name));
     //reset form
     setFormData({
-      name: ''
-    })
+      name: "",
+    });
   };
   //get data from store
-  const{error,loading,isAdded}=useSelector(state=>state?.brands);
+  const { error, loading, isAdded } = useSelector((state) => state?.brands);
+
   return (
-    
     <>
-    {isAdded && <SuccessMsg message='Brand Created Successfullt'/>}
-    {error && <ErrorMsg message={error?.message}/>}
+      {isAdded && <SuccessMsg message="Brand Created Successfully" />}
+      {error && <ErrorMsg message={error?.message} />}
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <svg
@@ -74,11 +73,15 @@ export default function AddBrand() {
                 </div>
               </div>
               <div>
-                {loading ? <LoadingComponent/> : <button
-                  type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  Add Product Brand
-                </button>}
+                {loading ? (
+                  <LoadingComponent />
+                ) : (
+                  <button
+                    type="submit"
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Add Product Brand
+                  </button>
+                )}
               </div>
             </form>
 

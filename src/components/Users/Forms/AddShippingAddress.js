@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getUserProfileAction, updateUserShippingAddressAction } from "../../../redux/slices/users/userSlices";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingComponent from "../../LoadingComp/LoadingComponent";
+import {
+  getUserProfileAction,
+  updateUserShippingAddressAction,
+} from "../../../redux/slices/users/usersSlice";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
+import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import SuccessMsg from "../../SuccessMsg/SuccessMsg";
 
 const AddShippingAddress = () => {
   //dispatch
   const dispatch = useDispatch();
-  
   //user profile
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getUserProfileAction());
-  },[dispatch])
-  const {loading,error,profile}=useSelector(state=>state?.users);
-  const user = profile ?.user;
-  console.log(user?.hasShippingAddress)
+  }, [dispatch]);
+  const { loading, error, profile } = useSelector((state) => state?.users);
+  const user = profile?.user;
+  console.log(user?.hasShippingAddress);
   const [formData, setFormData] = useState({
-    firstName:"",
+    firstName: "",
     lastName: "",
     address: "",
     city: "",
@@ -33,13 +35,14 @@ const AddShippingAddress = () => {
 
   //onsubmit
   const onSubmit = (e) => {
+    console.log(formData);
     e.preventDefault();
     dispatch(updateUserShippingAddressAction(formData));
   };
 
   return (
     <>
-    {error && <ErrorMsg message={error?.message}/>}
+      {error && <ErrorMsg message={error?.message} />}
       {/* shipping details */}
       {user?.hasShippingAddress ? (
         <div className="mt-6">
@@ -160,7 +163,7 @@ const AddShippingAddress = () => {
                 value={formData.country}
                 onChange={onChange}
                 className="block w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                <option value="India">India</option>
+                <option value="USA">United States</option>
                 <option value="CAN">Canada</option>
                 <option value="MEX">Mexico</option>
                 <option value="Ghana">Ghana</option>
@@ -224,11 +227,15 @@ const AddShippingAddress = () => {
               />
             </div>
           </div>
-          {loading ? <LoadingComponent/> : <button
-            type="submit"
-            className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
-            Add Shipping Address
-          </button>}
+          {loading ? (
+            <LoadingComponent />
+          ) : (
+            <button
+              type="submit"
+              className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
+              Add Shipping Address
+            </button>
+          )}
         </form>
       )}
     </>
