@@ -223,10 +223,6 @@ const usersSlice = createSlice({
     builder.addCase(resetErrAction.pending, (state) => {
       state.error = null;
     });
-     //reset success action
-     builder.addCase(resetSuccessAction.pending, (state) => {
-      state.error = null;
-    });
   },
 });
 

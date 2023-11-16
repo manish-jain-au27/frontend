@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserProfileAction } from "../../../redux/slices/users/usersSlice";
 import CustomerDetails from "./CustomerDetails";
 import ShippingAddressDetails from "./ShippingAddressDetails";
-
+import BottomNavigation from "../../HomePage/BottomNavigation";
 export default function CustomerProfile() {
   //dispatch
   const dispatch = useDispatch();
@@ -153,7 +153,9 @@ export default function CustomerProfile() {
               <ShippingAddressDetails
                 shippingAddress={profile?.user?.shippingAddress}
               />
+               <BottomNavigation />
             </>
+           
           );
         })
       )}

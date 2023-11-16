@@ -1,0 +1,66 @@
+/* Apply glass morphism effect */
+.glass-container {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+    height: 100%; /* Adjust the height as needed */
+}
+
+.glass-container:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for product details */
+.product-container {
+    transform: perspective(1000px) rotateX(5deg);
+    transition: transform 0.3s ease;
+    position: relative;
+    height: 100%; /* Adjust the height as needed */
+}
+
+.product-container img {
+    height: 100%; /* Adjust the height of the image inside the container */
+    width: 100%;
+    object-fit: cover;
+}
+
+
+
+/* Responsive design */
+@media (max-width: 767px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .glass-container,
+    .product-container {
+        transform: none;
+        width: 150px;
+        height: 320px; /* Reset height for smaller screens */
+    }
+
+    .product-container img {
+        height: 190px; /* Make the image fill the container height */
+        width: 200%; /* Make the image fill the container width */
+        object-fit: cover; /* Maintain aspect ratio and cover the container */
+        border-radius: 15px; /* Optional: Add border-radius for a rounded look */
+        transition: transform 0.3s ease; /* Optional: Add transition effect for hover */
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+    .product-container:hover img {
+        transform: scale(1.1); /* Optional: Add scale effect on hover */
+    }
+
+    .product-container h3 {
+        font-size: 14px; /* Adjust the font size for smaller screens */
+        margin-top: 10px; /* Optional: Add margin for spacing */
+    }
+}
+

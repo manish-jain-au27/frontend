@@ -1,0 +1,65 @@
+/* Apply glass morphism effect */
+.glass-container {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    overflow: hidden;
+    max-width: 300px;
+    height: 300px; /* Adjust the height as needed */
+}
+
+.glass-container:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    .glass-container {
+        max-width: 100%;
+        height: 200px; /* Adjust the height for mobile */
+    }
+}
+
+/* Apply glass morphism effect to the inner container */
+.home-product-trending-container {
+    overflow: hidden;
+}
+
+.home-product-trending-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+}
+
+.home-product-trending-container .content {
+    padding: 1.5rem;
+}
+
+.home-product-trending-container h3 {
+    font-size: 1rem;
+    color: #4a5568;
+}
+
+.home-product-trending-container p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #718096;
+}
+
+.home-product-trending-container .view-button {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #e5e7eb;
+    color: #4a5568;
+    border-radius: 9999px;
+    transition: background-color 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.home-product-trending-container:hover .view-button {
+    background-color: #cbd5e0;
+}

@@ -10,7 +10,7 @@ import {
   PencilIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
-
+import BottomNavigation from "../../HomePage/BottomNavigation";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -45,6 +45,7 @@ export default function CustomerDetails({ email, dateJoined, fullName }) {
               aria-hidden="true"
             />
             Date Joined: {dateJoined}
+            <BottomNavigation />
           </div>
         </div>
       </div>

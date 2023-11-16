@@ -1,0 +1,15 @@
+/* BottomNavigation.css */
+
+/* Bottom navigation styling */
+.bottom-navigation {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Media query to hide bottom navigation on screens larger than 768px */
+  @media (min-width: 769px) {
+    .bottom-navigation {
+      display: none;
+    }
+  }
+  

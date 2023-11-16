@@ -1,0 +1,223 @@
+/* prod.css */
+
+/* Container styles */
+.bg-white {
+  background-color: #fff;
+}
+
+/* Product details section */
+.text-xl {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Reviews section */
+.text-sm {
+  font-size: 0.875rem;
+}
+
+/* Image gallery */
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-2 > * {
+  grid-column: span 2;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Color picker */
+.space-x-3 > * + * {
+  margin-left: 0.75rem;
+}
+
+/* Size picker */
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Add to cart button */
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+/* Proceed to checkout button */
+.bg-green-800 {
+  background-color: #047857;
+}
+
+/* Image carousel */
+.react-responsive-carousel .carousel {
+  position: relative;
+}
+
+.react-responsive-carousel .carousel .thumbs-wrapper {
+  margin-top: 0.5rem;
+}
+
+.react-responsive-carousel .carousel .thumbs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-responsive-carousel .carousel .thumb {
+  border: 2px solid transparent;
+  margin-right: 0.25rem;
+  cursor: pointer;
+}
+
+.react-responsive-carousel .carousel .thumb.selected,
+.react-responsive-carousel .carousel .thumb:hover {
+  border-color: #5a67d8;
+}
+
+/* Recent reviews section */
+.divide-y {
+  border-color: #e5e7eb;
+}
+
+/* Star icon */
+.h-5 {
+  height: 1.25rem;
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+/* Overall font and spacing */
+.prose-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Policies section */
+.border-gray-200 {
+  border-color: #e5e7eb;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 640px) {
+  .lg\:col-span-5,
+  .lg\:col-span-7 {
+    grid-column: span 12;
+  }
+
+  .lg\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lg\:col-span-7 {
+    grid-column: span 12;
+  }
+
+  /* Additional adjustments for small screens go here */
+
+  /* Ensure product images are visible */
+  .lg\:grid-cols-2 img {
+    width: 100%; /* Make images fill their container */
+    height: auto; /* Maintain aspect ratio */
+  }
+
+  /* Style for the main image on smaller screens */
+  .lg\:hidden .main-image {
+    border: 2px solid #5a67d8;
+    border-radius: 0.375rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Style for the thumbnail images on smaller screens */
+  .lg\:hidden .grid-cols-2 img {
+    border: 1px solid transparent;
+    margin-right: 0.25rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+
+  .lg\:hidden .grid-cols-2 img:hover {
+    opacity: 0.8;
+  }
+}
+
+/* Responsive styles for large screens */
+@media (min-width: 1024px) {
+  .lg\:col-span-5 {
+    grid-column: span 5;
+  }
+
+  .lg\:col-span-7 {
+    grid-column: span 7;
+  }
+
+  .lg\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  /* Additional adjustments for large screens go here */
+
+  /* Increase the size of images within the carousel */
+  .react-responsive-carousel .carousel .slide img {
+    width: 100%; /* Adjust the width as needed */
+    max-width: 100%; /* Ensure images don't exceed their original size */
+    height: auto; /* Maintain aspect ratio */
+  }
+}
+
+/* Thumbnail Image Styling */
+/* prod.css */
+
+/* ... (Previous styles) */
+/* Thumbnail Image Styling */
+.thumbnail-image {
+  width: 60px; /* Adjust the width as needed */
+  height: 70px; /* Adjust the height as needed */
+  border: 1px solid transparent; /* Border for thumbnail image */
+  margin-right: 0.25rem; /* Adjust the margin as needed */
+  cursor: pointer; /* Change cursor on hover */
+  transition: opacity 0.3s, border-color 0.3s; /* Smooth transition for opacity and border color */
+}
+
+.thumbnail-image:hover {
+  opacity: 0.8; /* Reduce opacity on hover */
+  border-color: #5a67d8; /* Change border color on hover */
+}
+
+/* Main Image Styling */
+.main-image {
+  width: 100%; /* Set the width as needed, you can use a specific value like 300px or a percentage like 80% */
+  max-width: 500px; /* Set a maximum width if needed */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 400px; /* Set a maximum height if needed */
+  border: 2px solid transparent; /* Border for the main image */
+  border-radius: 0.375rem; /* Border radius for the main image */
+  transition: border 0.3s; /* Smooth transition for the border */
+}
+
+/* Main Image Hover Styling */
+.main-image:hover {
+  border-color: #5a67d8; /* Change border color on hover */
+}
+
+/* Responsive styles for small screens (continued) */
+@media (max-width: 640px) {
+  .lg\:col-span-2 img {
+    width: 20px; /* Make thumbnails smaller on mobile */
+    height: 50px; /* Make thumbnails smaller on mobile */
+  }
+}

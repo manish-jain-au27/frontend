@@ -8,6 +8,7 @@ import AddProduct from "./components/Admin/Products/AddProduct";
 import RegisterForm from "./components/Users/Forms/RegisterForm";
 import HomePage from "./components/HomePage/HomePage";
 import Navbar from "./components/Navbar/Navbar";
+import BottomNavigation from "./components/HomePage/BottomNavigation";
 import OrderHistory from "./components/Admin/Orders/ManageOrders";
 import OrderPayment from "./components/Users/Products/OrderPayment";
 import ManageCategories from "./components/Admin/Categories/ManageCategories";
@@ -86,6 +87,7 @@ const App = () => {
               </AdminRoutes>
             }
           />
+          
           {/* coupons */}
           <Route
             path="add-coupon"
@@ -176,6 +178,7 @@ const App = () => {
         <Route path="/products/:id" element={<Product />} />
         <Route path="/all-categories" element={<AllCategories />} />
         <Route path="/success" element={<ThanksForOrdering />} />
+        <Route path="/BottomNavigation" element={<BottomNavigation />} />
         {/* review */}
         <Route
           path="/add-review/:id"

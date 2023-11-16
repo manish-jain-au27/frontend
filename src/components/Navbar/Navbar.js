@@ -139,7 +139,7 @@ export default function Navbar() {
                           <Link
                             key={category?._id}
                             to={`/products-filters?category=${category?.name}`}
-                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                            className="flex items-center text-sm font-medium text-blue-400 hover:text-blue-900"
                           >
                             {category?.name}
                           </Link>
@@ -150,13 +150,13 @@ export default function Navbar() {
                 </div>
 
                 {/* mobile links register/login */}
-                <div className="space-y-6 border-t border-gray-200 py-6 px-4">
+                <div className="space-y-6 border-t border-white py-6 px-4">
                   {!isLoggedIn && (
                     <>
                       <div className="flow-root">
                         <Link
                           to="/register"
-                          className="-m-2 block p-2 font-medium text-gray-900"
+                          className="-m-2 block p-2 font-medium text-blue-600"
                         >
                           Create an account
                         </Link>
@@ -164,7 +164,7 @@ export default function Navbar() {
                       <div className="flow-root">
                         <Link
                           to="/login"
-                          className="-m-2 block p-2 font-medium text-gray-900"
+                          className="-m-2 block p-2 font-medium text-blue-600"
                         >
                           Sign in
                         </Link>
@@ -173,7 +173,7 @@ export default function Navbar() {
                   )}
                 </div>
 
-                <div className="space-y-6 border-t border-gray-200 py-6 px-4"></div>
+                <div className="space-y-6 border-t border-white py-6 px-4"></div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -201,24 +201,24 @@ export default function Navbar() {
           )}
           {/* Top navigation  desktop*/}
           {!isLoggedIn && (
-            <div className="bg-gray-800">
+            <div className="bg-white">
               <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   {!isLoggedIn && (
                     <>
                       <Link
                         to="/register"
-                        className="text-sm font-medium text-white hover:text-gray-100"
+                        className="text-sm font-medium text-blue-600 hover:text-gray-100"
                       >
                         Create an account
                       </Link>
                       <span
-                        className="h-6 w-px bg-gray-600"
+                        className="h-6 w-px bg-white"
                         aria-hidden="true"
                       />
                       <Link
                         to="/login"
-                        className="text-sm font-medium text-white hover:text-gray-100"
+                        className="text-sm font-medium text-blue-600 hover:text-gray-100"
                       >
                         Sign in
                       </Link>
@@ -238,7 +238,7 @@ export default function Navbar() {
                     <Link to="/">
                       <span className="sr-only">Your Company</span>
                       <img
-                        className="h-32 pt-2 w-auto"
+                        className="h-12 w-10 pt-2 w-auto"
                         src={logo}
                         alt="i-novotek logo"
                       />
@@ -253,7 +253,7 @@ export default function Navbar() {
                           <>
                             <Link
                               to="/products?category=clothing"
-                              className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                              className="flex items-center text-sm font-medium text-blue-400 hover:text-blue-900"
                             >
                               Clothing
                             </Link>
@@ -279,7 +279,7 @@ export default function Navbar() {
                                 <Link
                                   key={category?._id}
                                   to={`/products-filters?category=${category?.name}`}
-                                  className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                                  className="flex items-center text-sm font-medium text-blue-400 hover:text-blue-900"
                                 >
                                   {category?.name}
                                 </Link>
@@ -295,7 +295,7 @@ export default function Navbar() {
                   <div className="flex flex-1 items-center lg:hidden">
                     <button
                       type="button"
-                      className="-ml-2 rounded-md bg-white p-2 text-gray-400"
+                      className="-ml-2 rounded-md bg-white p-2 text-blue-600"
                       onClick={() => setMobileMenuOpen(true)}
                     >
                       <span className="sr-only">Open menu</span>
@@ -305,7 +305,7 @@ export default function Navbar() {
                   {/* logo */}
                   <Link to="/" className="lg:hidden">
                     <img
-                      className="h-32 mt-2 w-auto"
+                      className="h-12 w-10 mt-2 w-auto"
                       src={logo}
                       alt="i-novotek logo"
                     />
@@ -327,7 +327,7 @@ export default function Navbar() {
                           <div className="flex">
                             <Link
                               to="/customer-profile"
-                              className="-m-2 p-2 mr-2 text-gray-400 hover:text-gray-500"
+                              className="-m-2 p-2 mr-2 text-blue-600 hover:text-white"
                             >
                               <UserIcon
                                 className="h-6 w-6"

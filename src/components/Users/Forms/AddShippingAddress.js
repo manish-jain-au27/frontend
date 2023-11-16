@@ -7,7 +7,7 @@ import {
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import SuccessMsg from "../../SuccessMsg/SuccessMsg";
-
+import BottomNavigation from "../../HomePage/BottomNavigation";
 const AddShippingAddress = () => {
   //dispatch
   const dispatch = useDispatch();
@@ -236,7 +236,9 @@ const AddShippingAddress = () => {
               Add Shipping Address
             </button>
           )}
+           <BottomNavigation />
         </form>
+       
       )}
     </>
   );

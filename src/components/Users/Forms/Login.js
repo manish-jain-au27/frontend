@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUserAction } from "../../../redux/slices/users/usersSlice";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
-
+import BottomNavigation from "../../HomePage/BottomNavigation";
 const Login = () => {
   //dispatch
   const dispatch = useDispatch();
@@ -105,6 +105,7 @@ const Login = () => {
             ></div>
           </div>
         </div>
+        <BottomNavigation />
       </section>
     </>
   );

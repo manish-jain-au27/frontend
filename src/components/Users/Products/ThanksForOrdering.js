@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+import BottomNavigation from "../../HomePage/BottomNavigation";
 const products = [
   {
     id: 1,
@@ -48,6 +48,7 @@ export default function ThanksForOrdering() {
                   Continue Shopping
                   <span aria-hidden="true"> &rarr;</span>
                 </Link>
+                <BottomNavigation />
               </div>
             </div>
           </div>

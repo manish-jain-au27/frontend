@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUserAction } from "../../../redux/slices/users/usersSlice";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
-
+import BottomNavigation from "../../HomePage/BottomNavigation";
 const RegisterForm = () => {
   //dispatch
   const dispatch = useDispatch();
@@ -90,6 +90,7 @@ const RegisterForm = () => {
               'url("https://cdn.pixabay.com/photo/2017/03/29/04/47/high-heels-2184095_1280.jpg")',
           }}
         />
+        <BottomNavigation />
       </section>
     </>
   );

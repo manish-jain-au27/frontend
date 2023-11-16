@@ -7,6 +7,7 @@ import { getUserProfileAction } from "../../../redux/slices/users/usersSlice";
 import ErrorMsg from "../../ErrorMsg/ErrorMsg";
 import LoadingComponent from "../../LoadingComp/LoadingComponent";
 import AddShippingAddress from "../Forms/AddShippingAddress";
+import BottomNavigation from "../../HomePage/BottomNavigation";
 export default function OrderPayment() {
   //get data from location
   const location = useLocation();
@@ -95,7 +96,7 @@ export default function OrderPayment() {
 
                           <div className="flex flex-1 items-end justify-between pt-2">
                             <p className="mt-1 text-sm font-medium text-gray-900">
-                              $ {product?.price} X {product?.qty} =$
+                              Rs. {product?.price} X {product?.qty} =Rs.
                               {product?.totalPrice}
                             </p>
                           </div>
@@ -107,13 +108,13 @@ export default function OrderPayment() {
                     <div className="flex items-center justify-between">
                       <dt className="text-sm">Taxes</dt>
                       <dd className="text-sm font-medium text-gray-900">
-                        $0.00
+                        Rs.0.00
                       </dd>
                     </div>
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                       <dt className="text-base font-medium">Sub Total</dt>
                       <dd className="text-base font-medium text-gray-900">
-                        $ {sumTotalPrice}.00
+                        Rs. {sumTotalPrice}.00
                       </dd>
                     </div>
                   </dl>
@@ -125,9 +126,10 @@ export default function OrderPayment() {
                       <button
                         onClick={placeOrderHandler}
                         className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
-                        Confirm Payment - ${sumTotalPrice}
+                        Confirm Payment - Rs.{sumTotalPrice}
                       </button>
                     )}
+                    <BottomNavigation />
                   </div>
                 </div>
               </div>

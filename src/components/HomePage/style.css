@@ -1,0 +1,64 @@
+
+/* style.css */
+/* CSS for mobile devices (screen width less than or equal to 768px) */
+@media screen and (max-width: 768px) {
+  .page-container {
+    background-color: white !important; /* Set the background color to white */
+  }
+}
+
+
+.full-width-carousel-container {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Style individual carousel slides */
+.carousel-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px; /* Set a minimum height for the carousel for better responsiveness */
+}
+
+/* Ensure the images fill their container while maintaining aspect ratio */
+.carousel-slide img {
+  width: 100%;
+  height: 500px;
+  max-height: 100%; /* Prevent image overflow */
+}
+
+/* Customize the appearance of the carousel navigation buttons */
+.carousel .control-dots .dot {
+  background: #007BFF; /* Change to your desired color */
+  width: 12px;
+  height: 12px;
+  margin: 0 4px;
+  border-radius: 50%;
+}
+
+/* Style the carousel caption if needed */
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.7); /* Add a semi-transparent background to the caption */
+  color: #fff; /* Set text color */
+  padding: 10px; /* Adjust as needed */
+}
+.carousel-container {
+  border: 2px solid #2b6cb0; /* Change the color and border width as needed */
+  padding: 20px; /* Optional: Add padding to the container */
+  border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+}
+
+/* CSS for mobile devices (screen width less than or equal to 768px) */
+@media (max-width: 768px) {
+  .carousel-container {
+    width: 100%; /* Set the width to 100% for mobile screens */
+  }
+
+  .carousel-slide img {
+    width: 100%; /* Make images 100% width of their container */
+    height: auto; /* Maintain aspect ratio */
+  }
+}

@@ -2,15 +2,16 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchCategoriesAction } from "../../redux/slices/categories/categoriesSlice";
+import './homecat.css';
 
 const HomeCategories = () => {
-  //dispatch
+  // Dispatch
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCategoriesAction());
   }, [dispatch]);
 
-  //get data from store
+  // Get data from store
   const { categories } = useSelector((state) => state?.categories);
 
   const categoriesToShow = categories?.categories?.slice(0, 5);
@@ -22,25 +23,24 @@ const HomeCategories = () => {
           <div className="relative box-content h-80 overflow-x-auto py-2 xl:overflow-visible">
             <div className="min-w-screen-xl absolute flex space-x-8 px-4 sm:px-6 lg:px-8 xl:relative xl:grid xl:grid-cols-5 xl:gap-x-8 xl:space-x-0 xl:px-0">
               {categoriesToShow?.map((category) => (
-                <Link
+                <div
                   key={category.name}
-                  to={`/products-filters?category=${category.name}`}
-                  className="relative flex h-80 w-56 flex-col overflow-hidden rounded-lg p-6 hover:opacity-75 xl:w-auto">
-                  <span aria-hidden="true" className="absolute inset-0">
+                  className="relative flex flex-col h-80 w-56 overflow-hidden p-6 hover:opacity-75 xl:w-auto home-categories-container"
+                >
+                  <div className="bg-gray-200 rounded-lg overflow-hidden shadow-md border-2 border-gray-300 home-categories-container">
                     <img
                       src={category.image}
                       alt=""
-                      className="h-full w-full object-cover object-center"
+                      className="h-48 w-full object-cover object-center mb-2 rounded-t-lg"
                     />
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"
-                  />
-                  <span className="relative mt-auto text-center text-xl font-bold text-white">
-                    {category.name} ({category.products.length})
-                  </span>
-                </Link>
+                    <Link
+                      to={`/products-filters?category=${category.name}`}
+                      className="block px-4 py-2 bg-blue-500 text-white rounded-b-lg hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                    >
+                      View Products
+                    </Link>
+                  </div>
+                </div>
               ))}
             </div>
           </div>

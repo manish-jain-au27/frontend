@@ -1,3 +1,4 @@
+import BottomNavigation from "../../HomePage/BottomNavigation";
 export default function ShippingAddressDetails({ shippingAddress }) {
   return (
     <div className="relative">
@@ -31,6 +32,7 @@ export default function ShippingAddressDetails({ shippingAddress }) {
           <p className="mt-3 text-lg text-gray-600">
             Postal code: {shippingAddress?.postalCode},
           </p>
+          <BottomNavigation />
         </div>
       </div>
     </div>

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
-import Swal from "sweetalert2";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
+
+import Swal from "sweetalert2";
 import {
   CurrencyDollarIcon,
   GlobeAmericasIcon,
@@ -14,9 +17,10 @@ import {
   addOrderToCartaction,
   getCartItemsFromLocalStorageAction,
 } from "../../../redux/slices/cart/cartSlices";
+import BottomNavigation from "../../HomePage/BottomNavigation";
 const product = {
   name: "Basic Tee",
-  price: "$35",
+  price: "Rs.35",
   href: "#",
   breadcrumbs: [
     { id: 1, name: "Women", href: "#" },
@@ -95,10 +99,29 @@ export default function Product() {
   const dispatch = useDispatch();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   let productDetails = {};
+// State to control the image zoom
+const [zoomedIn, setZoomedIn] = useState(false);
 
-  //get id from params
+// Function to toggle image zoom
+const toggleZoom = () => {
+  setZoomedIn(!zoomedIn);
+};
+   //get id from params
   const { id } = useParams();
   useEffect(() => {
     dispatch(fetchProductAction(id));
@@ -154,7 +177,7 @@ export default function Product() {
         description: product?.description,
         color: selectedColor,
         size: selectedSize,
-        image: product?.images[0],
+        image: product?.images,
         totalPrice: product?.price,
         qtyLeft: product?.qtyLeft,
       })
@@ -166,18 +189,19 @@ export default function Product() {
     });
     return dispatch(getCartItemsFromLocalStorageAction());
   };
-
+  
   return (
     <div className="bg-white">
-      <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8">
-        <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
+    <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8">
+      <div className={`lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8 ${isMobile ? "lg:grid-cols-1" : ""}`}>
+      
           <div className="lg:col-span-5 lg:col-start-8">
             <div className="flex justify-between">
               <h1 className="text-xl font-medium text-gray-900">
                 {product?.name}
               </h1>
               <p className="text-xl font-medium text-gray-900">
-                $ {product?.price}.00
+                Rs. {product?.price}.00
               </p>
             </div>
             {/* Reviews */}
@@ -225,62 +249,63 @@ export default function Product() {
             </div>
           </div>
 
-          {/* Image gallery */}
-          <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
+         {/* Image gallery */}
+         <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
             <h2 className="sr-only">Images</h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
+            {/* Use the Carousel component for a more stylish image display */}
+            <Carousel showArrows={true} showThumbs={true} dynamicHeight={true}>
               {product?.images?.map((image) => (
-                <img
-                  key={image.id}
-                  src={image}
-                  alt={image.imageAlt}
-                  className={classNames(
-                    image.primary
-                      ? "lg:col-span-2 lg:row-span-2"
-                      : "hidden lg:block",
-                    "rounded-lg"
-                  )}
-                />
+                <div >
+                  <img
+                    key={image.id}
+                    src={image}  
+                    alt={image.imageAlt}
+                    className="rounded-lg"
+                  />
+                </div>
               ))}
-            </div>
+            </Carousel>
           </div>
-
+       
           <div className="mt-8 lg:col-span-5">
             <>
-              {/* Color picker */}
-              <div>
-                <h2 className="text-sm font-medium text-gray-900">Color</h2>
-                <div className="flex items-center space-x-3">
-                  <RadioGroup value={selectedColor} onChange={setSelectedColor}>
-                    <div className="mt-4 flex items-center space-x-3">
-                      {product?.colors?.map((color) => (
-                        <RadioGroup.Option
-                          key={color}
-                          value={color}
-                          className={({ active, checked }) =>
-                            classNames(
-                              active && checked ? "ring ring-offset-1" : "",
-                              !active && checked ? "ring-2" : "",
-                              "-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none"
-                            )
-                          }>
-                          <RadioGroup.Label as="span" className="sr-only">
-                            {color}
-                          </RadioGroup.Label>
-                          <span
-                            style={{ backgroundColor: color }}
-                            aria-hidden="true"
-                            className={classNames(
-                              "h-8 w-8 border border-black border-opacity-10 rounded-full"
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
-              </div>
+      {/* Color picker */}
+<div>
+  <h2 className="text-sm font-medium text-gray-900">Color</h2>
+  <div className="flex flex-col items-center mt-4 space-y-3">
+    <RadioGroup value={selectedColor} onChange={setSelectedColor}>
+      <div className="flex flex-wrap items-center justify-center space-x-3">
+        {product?.colors?.map((color) => (
+          <RadioGroup.Option
+            key={color}
+            value={color}
+            className={({ active, checked }) =>
+              classNames(
+                active && checked ? "ring ring-offset-1" : "",
+                !active && checked ? "ring-2" : "",
+                "-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none"
+              )
+            }
+          >
+            <RadioGroup.Label as="span" className="sr-only">
+              {color}
+            </RadioGroup.Label>
+            <span
+              style={{ backgroundColor: color }}
+              aria-hidden="true"
+              className={classNames(
+                "h-8 w-8 border border-black border-opacity-10 rounded-full"
+              )}
+            />
+          </RadioGroup.Option>
+        ))}
+      </div>
+    </RadioGroup>
+  </div>
+</div>
+
+
 
               {/* Size picker */}
               <div className="mt-8">
@@ -322,7 +347,7 @@ export default function Product() {
               ) : (
                 <button
                   onClick={() => addToCartHandler()}
-                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-black hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                   Add to cart
                 </button>
               )}
@@ -331,7 +356,7 @@ export default function Product() {
               {cartItems.length > 0 && (
                 <Link
                   to="/shopping-cart"
-                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-green-800 py-3 px-8 text-base font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-green-800 py-3 px-8 text-base font-medium text-black hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                   Proceed to checkout
                 </Link>
               )}
